@@ -1,26 +1,134 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: oklch(0.985 0.01 82.26);
+  --foreground: oklch(0.22 0.015 255.15);
+  --card: oklch(0.995 0.004 85.2);
+  --card-foreground: oklch(0.22 0.015 255.15);
+  --popover: oklch(0.995 0.004 85.2);
+  --popover-foreground: oklch(0.22 0.015 255.15);
+  --primary: oklch(0.56 0.15 56.55);
+  --primary-foreground: oklch(0.99 0.015 95.1);
+  --secondary: oklch(0.95 0.02 87.95);
+  --secondary-foreground: oklch(0.28 0.03 255.15);
+  --muted: oklch(0.95 0.01 100.51);
+  --muted-foreground: oklch(0.48 0.02 250.67);
+  --accent: oklch(0.9 0.05 223.91);
+  --accent-foreground: oklch(0.23 0.03 255.16);
+  --destructive: oklch(0.63 0.22 28.5);
+  --destructive-foreground: oklch(0.99 0.01 106.42);
+  --border: oklch(0.89 0.015 95.62);
+  --input: oklch(0.89 0.015 95.62);
+  --ring: oklch(0.65 0.12 56.55);
+  --chart-1: oklch(0.68 0.17 56.55);
+  --chart-2: oklch(0.62 0.14 218.31);
+  --chart-3: oklch(0.58 0.13 163.22);
+  --chart-4: oklch(0.72 0.16 330.24);
+  --chart-5: oklch(0.74 0.16 95.64);
+  --radius: 1rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 0.375rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --font-sans: var(--font-manrope);
+  --font-bengali: var(--font-bengali);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: oklch(0.17 0.015 250.72);
+  --foreground: oklch(0.97 0.01 95.1);
+  --card: oklch(0.22 0.015 252.28);
+  --card-foreground: oklch(0.97 0.01 95.1);
+  --popover: oklch(0.22 0.015 252.28);
+  --popover-foreground: oklch(0.97 0.01 95.1);
+  --primary: oklch(0.74 0.16 56.1);
+  --primary-foreground: oklch(0.2 0.015 255.1);
+  --secondary: oklch(0.3 0.015 255.56);
+  --secondary-foreground: oklch(0.97 0.01 95.1);
+  --muted: oklch(0.26 0.02 255.98);
+  --muted-foreground: oklch(0.75 0.02 95.46);
+  --accent: oklch(0.3 0.05 217.54);
+  --accent-foreground: oklch(0.97 0.01 95.1);
+  --destructive: oklch(0.6 0.2 28.12);
+  --destructive-foreground: oklch(0.97 0.01 95.1);
+  --border: oklch(0.32 0.015 255.56);
+  --input: oklch(0.32 0.015 255.56);
+  --ring: oklch(0.73 0.16 56.1);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), var(--font-bengali), sans-serif;
+  background-image:
+    radial-gradient(circle at top left, rgba(251, 191, 36, 0.08), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.08), transparent 25%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent 60%);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 16%, transparent);
+  border-radius: 999px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.glass-card {
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.page-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border) 40%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border) 40%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
 }

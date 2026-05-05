@@ -1,0 +1,18 @@
+import { z } from "zod";
+
+import { optionalTextSchema } from "@/lib/validations/shared";
+
+export const importantInfoFormSchema = z.object({
+  id: z.string().optional(),
+  electricityAccount: optionalTextSchema,
+  gasCardNumber: optionalTextSchema,
+  wifiInfo: optionalTextSchema,
+  houseOwnerPhone: optionalTextSchema,
+  emergencyContacts: optionalTextSchema,
+  nearbyDoctorInfo: optionalTextSchema,
+  nearbyPharmacyInfo: optionalTextSchema,
+  otherNotes: optionalTextSchema,
+  membersCanView: z.boolean().default(true),
+});
+
+export type ImportantInfoFormValues = z.infer<typeof importantInfoFormSchema>;
