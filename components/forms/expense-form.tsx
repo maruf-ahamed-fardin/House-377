@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveOtherExpenseAction } from "@/lib/actions/expenses";
-import { otherExpenseFormSchema, type OtherExpenseFormValues } from "@/lib/validations/finance";
+import { otherExpenseFormSchema, type OtherExpenseFormInput, type OtherExpenseFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -36,7 +36,7 @@ export function ExpenseForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<OtherExpenseFormValues>({
+  const form = useForm<OtherExpenseFormInput, undefined, OtherExpenseFormValues>({
     resolver: zodResolver(otherExpenseFormSchema),
     defaultValues: {
       id: initialData?.id,

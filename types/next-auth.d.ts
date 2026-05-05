@@ -1,5 +1,4 @@
 import { DefaultSession, DefaultUser } from "next-auth";
-import { JWT } from "next-auth/jwt";
 
 type AppRole = "ADMIN" | "MEMBER";
 type AppMemberStatus = "ACTIVE" | "INACTIVE";

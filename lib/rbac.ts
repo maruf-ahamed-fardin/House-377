@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { getServerAuthSession } from "@/lib/auth";
+import { auth } from "@/auth";
 
 export async function requireUser() {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   if (!session?.user) {
     redirect("/login");

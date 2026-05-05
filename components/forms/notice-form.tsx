@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveNoticeAction } from "@/lib/actions/notices";
-import { noticeFormSchema, type NoticeFormValues } from "@/lib/validations/finance";
+import { noticeFormSchema, type NoticeFormInput, type NoticeFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ export function NoticeForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<NoticeFormValues>({
+  const form = useForm<NoticeFormInput, undefined, NoticeFormValues>({
     resolver: zodResolver(noticeFormSchema),
     defaultValues: {
       id: initialData?.id,

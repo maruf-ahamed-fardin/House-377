@@ -29,4 +29,5 @@ export const memberFormSchema = z
     }
   });
 
-export type MemberFormValues = z.infer<typeof memberFormSchema>;
+export type MemberFormInput = z.input<typeof memberFormSchema>;
+export type MemberFormValues = z.output<typeof memberFormSchema>;

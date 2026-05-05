@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveMealRecordAction } from "@/lib/actions/meals";
-import { mealFormSchema, type MealFormValues } from "@/lib/validations/meal";
+import { mealFormSchema, type MealFormInput, type MealFormValues } from "@/lib/validations/meal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ export function MealForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<MealFormValues>({
+  const form = useForm<MealFormInput, undefined, MealFormValues>({
     resolver: zodResolver(mealFormSchema),
     defaultValues: {
       memberId: initialData?.memberId ?? members[0]?.value ?? "",

@@ -265,16 +265,5 @@ export async function getHistoryPageData(userId: string, role: "ADMIN" | "MEMBER
 }
 
 export async function getProfilePageData(userId: string, monthKey = getMonthKey()) {
-  const [profile, dashboardData] = await Promise.all([
-    prisma.memberProfile.findUnique({
-      where: { userId },
-      include: memberInclude,
-    }),
-    getMemberDashboardData(userId, monthKey),
-  ]);
-
-  return {
-    profile,
-    ...dashboardData,
-  };
+  return getMemberDashboardData(userId, monthKey);
 }

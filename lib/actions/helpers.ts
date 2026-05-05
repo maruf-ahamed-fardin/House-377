@@ -1,5 +1,3 @@
-"use server";
-
 import { revalidatePath } from "next/cache";
 
 import { getMonthKey } from "@/lib/month";

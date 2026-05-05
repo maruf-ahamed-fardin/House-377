@@ -15,4 +15,5 @@ export const importantInfoFormSchema = z.object({
   membersCanView: z.boolean().default(true),
 });
 
-export type ImportantInfoFormValues = z.infer<typeof importantInfoFormSchema>;
+export type ImportantInfoFormInput = z.input<typeof importantInfoFormSchema>;
+export type ImportantInfoFormValues = z.output<typeof importantInfoFormSchema>;

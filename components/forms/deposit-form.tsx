@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveDepositAction } from "@/lib/actions/deposits";
-import { depositFormSchema, type DepositFormValues } from "@/lib/validations/finance";
+import { depositFormSchema, type DepositFormInput, type DepositFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ export function DepositForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<DepositFormValues>({
+  const form = useForm<DepositFormInput, undefined, DepositFormValues>({
     resolver: zodResolver(depositFormSchema),
     defaultValues: {
       id: initialData?.id,

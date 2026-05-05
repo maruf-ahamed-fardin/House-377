@@ -140,12 +140,22 @@ export async function deleteMemberAction(memberId: string): Promise<ActionResult
       };
     }
 
-    await prisma.user.delete({
+    await prisma.user.update({
       where: { id: member.userId },
+      data: {
+        isActive: false,
+      },
+    });
+
+    await prisma.memberProfile.update({
+      where: { id: member.id },
+      data: {
+        status: "INACTIVE",
+      },
     });
 
     await createAuditLog({
-      action: "MEMBER_DELETED",
+      action: "MEMBER_DEACTIVATED",
       entityType: "MemberProfile",
       entityId: member.id,
       performedById: admin.id,
@@ -159,9 +169,9 @@ export async function deleteMemberAction(memberId: string): Promise<ActionResult
 
     return {
       success: true,
-      message: "Member removed successfully.",
+      message: "Member deactivated successfully.",
     };
   } catch (error) {
-    return actionError("Unable to remove member right now.", error);
+    return actionError("Unable to deactivate member right now.", error);
   }
 }

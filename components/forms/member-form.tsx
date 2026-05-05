@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveMemberAction } from "@/lib/actions/members";
-import { type MemberFormValues, memberFormSchema } from "@/lib/validations/member";
+import { type MemberFormInput, type MemberFormValues, memberFormSchema } from "@/lib/validations/member";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { UploadField } from "@/components/forms/upload-field";
 
-const defaultValues: MemberFormValues = {
+const defaultValues: MemberFormInput = {
   name: "",
   email: "",
   phone: "",
@@ -38,7 +38,7 @@ export function MemberForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<MemberFormValues>({
+  const form = useForm<MemberFormInput, undefined, MemberFormValues>({
     resolver: zodResolver(memberFormSchema),
     defaultValues: {
       ...defaultValues,

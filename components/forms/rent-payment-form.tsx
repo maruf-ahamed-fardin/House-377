@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveRentPaymentAction } from "@/lib/actions/rent";
-import { rentPaymentFormSchema, type RentPaymentFormValues } from "@/lib/validations/finance";
+import { rentPaymentFormSchema, type RentPaymentFormInput, type RentPaymentFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ export function RentPaymentForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<RentPaymentFormValues>({
+  const form = useForm<RentPaymentFormInput, undefined, RentPaymentFormValues>({
     resolver: zodResolver(rentPaymentFormSchema),
     defaultValues: {
       id: initialData?.id,

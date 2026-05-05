@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
 import { ArrowRight, BedDouble, BellRing, ChartNoAxesCombined, UtensilsCrossed, Wallet } from "lucide-react";
 import { redirect } from "next/navigation";
 
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { authOptions } from "@/lib/auth";
 
 const featureCards = [
   {
@@ -31,7 +30,7 @@ const featureCards = [
 ];
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session?.user) {
     redirect("/dashboard");

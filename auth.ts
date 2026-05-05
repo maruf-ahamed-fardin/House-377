@@ -1,11 +1,16 @@
+import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { getServerSession, type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
 
-export const authOptions: NextAuthOptions = {
+const protectedPrefixes = ["/dashboard", "/admin", "/chat", "/profile", "/history"];
+
+export const authConfig = {
+  trustHost: true,
   session: {
     strategy: "jwt",
   },
@@ -13,7 +18,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: "Email and Password",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -64,7 +69,25 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    authorized({ auth, request }) {
+      const pathname = request.nextUrl.pathname;
+      const isProtected = protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
+
+      if (!isProtected) {
+        return true;
+      }
+
+      if (!auth?.user) {
+        return false;
+      }
+
+      if (pathname.startsWith("/admin") && auth.user.role !== "ADMIN") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+
+      return true;
+    },
+    jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -76,21 +99,20 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id ?? "";
-        session.user.role = (token.role as "ADMIN" | "MEMBER") ?? "MEMBER";
-        session.user.memberProfileId = token.memberProfileId ?? null;
-        session.user.phone = token.phone ?? null;
-        session.user.isActive = token.isActive ?? true;
-        session.user.memberStatus = (token.memberStatus as "ACTIVE" | "INACTIVE" | null) ?? null;
+        session.user.id = typeof token.id === "string" ? token.id : "";
+        session.user.role = token.role === "ADMIN" || token.role === "MEMBER" ? token.role : "MEMBER";
+        session.user.memberProfileId = typeof token.memberProfileId === "string" ? token.memberProfileId : null;
+        session.user.phone = typeof token.phone === "string" ? token.phone : null;
+        session.user.isActive = typeof token.isActive === "boolean" ? token.isActive : true;
+        session.user.memberStatus =
+          token.memberStatus === "ACTIVE" || token.memberStatus === "INACTIVE" ? token.memberStatus : null;
       }
 
       return session;
     },
   },
-};
+} satisfies NextAuthConfig;
 
-export function getServerAuthSession() {
-  return getServerSession(authOptions);
-}
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

@@ -42,7 +42,7 @@ export function ChatPanel({ initialMessages }: { initialMessages: MessageWithSen
     }, 8000);
 
     return () => window.clearInterval(interval);
-  }, [refreshMessages]);
+  }, []);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">

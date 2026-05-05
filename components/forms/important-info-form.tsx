@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveImportantInfoAction } from "@/lib/actions/important-info";
-import { importantInfoFormSchema, type ImportantInfoFormValues } from "@/lib/validations/important-info";
+import { importantInfoFormSchema, type ImportantInfoFormInput, type ImportantInfoFormValues } from "@/lib/validations/important-info";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ export function ImportantInfoForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<ImportantInfoFormValues>({
+  const form = useForm<ImportantInfoFormInput, undefined, ImportantInfoFormValues>({
     resolver: zodResolver(importantInfoFormSchema),
     defaultValues: {
       id: initialData?.id,

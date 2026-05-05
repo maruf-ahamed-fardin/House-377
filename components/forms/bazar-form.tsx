@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveBazarExpenseAction } from "@/lib/actions/bazar";
-import { type BazarExpenseFormValues, bazarExpenseFormSchema } from "@/lib/validations/finance";
+import { bazarExpenseFormSchema, type BazarExpenseFormInput, type BazarExpenseFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,7 @@ export function BazarForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<BazarExpenseFormValues>({
+  const form = useForm<BazarExpenseFormInput, undefined, BazarExpenseFormValues>({
     resolver: zodResolver(bazarExpenseFormSchema),
     defaultValues: {
       id: initialData?.id,

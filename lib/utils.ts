@@ -20,3 +20,20 @@ export function decimalToNumber(value: unknown) {
 
   return 0;
 }
+
+export function getSingleSearchParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export function createQueryString(params: Record<string, string | null | undefined>) {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      searchParams.set(key, value);
+    }
+  });
+
+  const query = searchParams.toString();
+  return query ? `?${query}` : "";
+}

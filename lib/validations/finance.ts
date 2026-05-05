@@ -65,9 +65,15 @@ export const noticeFormSchema = z.object({
   isPublished: z.boolean().default(true),
 });
 
-export type BazarExpenseFormValues = z.infer<typeof bazarExpenseFormSchema>;
-export type RentSummaryFormValues = z.infer<typeof rentSummaryFormSchema>;
-export type RentPaymentFormValues = z.infer<typeof rentPaymentFormSchema>;
-export type OtherExpenseFormValues = z.infer<typeof otherExpenseFormSchema>;
-export type DepositFormValues = z.infer<typeof depositFormSchema>;
-export type NoticeFormValues = z.infer<typeof noticeFormSchema>;
+export type BazarExpenseFormInput = z.input<typeof bazarExpenseFormSchema>;
+export type BazarExpenseFormValues = z.output<typeof bazarExpenseFormSchema>;
+export type RentSummaryFormInput = z.input<typeof rentSummaryFormSchema>;
+export type RentSummaryFormValues = z.output<typeof rentSummaryFormSchema>;
+export type RentPaymentFormInput = z.input<typeof rentPaymentFormSchema>;
+export type RentPaymentFormValues = z.output<typeof rentPaymentFormSchema>;
+export type OtherExpenseFormInput = z.input<typeof otherExpenseFormSchema>;
+export type OtherExpenseFormValues = z.output<typeof otherExpenseFormSchema>;
+export type DepositFormInput = z.input<typeof depositFormSchema>;
+export type DepositFormValues = z.output<typeof depositFormSchema>;
+export type NoticeFormInput = z.input<typeof noticeFormSchema>;
+export type NoticeFormValues = z.output<typeof noticeFormSchema>;

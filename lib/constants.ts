@@ -5,7 +5,6 @@ import {
   BookOpen,
   ChartColumnBig,
   CreditCard,
-  HandCoins,
   LayoutDashboard,
   MessageSquareText,
   Receipt,

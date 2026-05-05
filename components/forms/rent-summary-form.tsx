@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { saveMonthlySummaryAction } from "@/lib/actions/rent";
-import { rentSummaryFormSchema, type RentSummaryFormValues } from "@/lib/validations/finance";
+import { rentSummaryFormSchema, type RentSummaryFormInput, type RentSummaryFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ export function RentSummaryForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<RentSummaryFormValues>({
+  const form = useForm<RentSummaryFormInput, undefined, RentSummaryFormValues>({
     resolver: zodResolver(rentSummaryFormSchema),
     defaultValues: initialData,
   });

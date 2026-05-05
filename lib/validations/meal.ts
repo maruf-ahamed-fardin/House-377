@@ -12,4 +12,5 @@ export const mealFormSchema = z.object({
   notes: z.union([z.string().trim(), z.literal("")]).optional(),
 });
 
-export type MealFormValues = z.infer<typeof mealFormSchema>;
+export type MealFormInput = z.input<typeof mealFormSchema>;
+export type MealFormValues = z.output<typeof mealFormSchema>;

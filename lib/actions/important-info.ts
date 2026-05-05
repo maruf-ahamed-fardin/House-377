@@ -1,5 +1,7 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
+
 import { createAuditLog } from "@/lib/audit";
 import { ActionResult, actionError, normalizeText, revalidateAppPaths } from "@/lib/actions/helpers";
 import { prisma } from "@/lib/prisma";
@@ -33,7 +35,7 @@ export async function saveImportantInfoAction(values: ImportantInfoFormValues): 
       gasCardNumber: normalizeText(data.gasCardNumber),
       wifiInfo: normalizeText(data.wifiInfo),
       houseOwnerPhone: normalizeText(data.houseOwnerPhone),
-      emergencyContacts: splitEmergencyContacts(data.emergencyContacts),
+      emergencyContacts: splitEmergencyContacts(data.emergencyContacts) ?? Prisma.JsonNull,
       nearbyDoctorInfo: normalizeText(data.nearbyDoctorInfo),
       nearbyPharmacyInfo: normalizeText(data.nearbyPharmacyInfo),
       otherNotes: normalizeText(data.otherNotes),

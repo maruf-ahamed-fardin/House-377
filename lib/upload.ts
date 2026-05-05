@@ -3,8 +3,8 @@ import path from "path";
 import { randomUUID } from "crypto";
 
 const uploadDirectories = {
-  avatars: path.join(process.cwd(), "public", "uploads", "avatars"),
-  receipts: path.join(process.cwd(), "public", "uploads", "receipts"),
+  avatars: path.join("public", "uploads", "avatars"),
+  receipts: path.join("public", "uploads", "receipts"),
 } as const;
 
 export type UploadFolder = keyof typeof uploadDirectories;
