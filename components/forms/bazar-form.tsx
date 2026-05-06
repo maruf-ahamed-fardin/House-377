@@ -16,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { UploadField } from "@/components/forms/upload-field";
 
+const UNASSIGNED_BUYER_VALUE = "__unassigned_buyer__";
+
 export function BazarForm({
   members,
   initialData,
@@ -92,12 +94,15 @@ export function BazarForm({
               control={form.control}
               name="boughtById"
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                <Select
+                  value={field.value || UNASSIGNED_BUYER_VALUE}
+                  onValueChange={(value) => field.onChange(value === UNASSIGNED_BUYER_VALUE ? "" : value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select member" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Unknown / shared</SelectItem>
+                    <SelectItem value={UNASSIGNED_BUYER_VALUE}>Unknown / shared</SelectItem>
                     {members.map((member) => (
                       <SelectItem key={member.value} value={member.value}>
                         {member.label}

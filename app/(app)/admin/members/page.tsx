@@ -105,7 +105,7 @@ export default async function MembersPage({
                             label="Deactivate"
                             message="This will deactivate the member account and keep their historical records. Continue?"
                             variant="ghost"
-                            action={() => deleteMemberAction(member.id)}
+                            action={deleteMemberAction.bind(null, member.id)}
                           />
                         </div>
                       </TableCell>

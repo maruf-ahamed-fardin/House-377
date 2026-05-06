@@ -82,7 +82,7 @@ export default async function NoticesPage({
                         Edit
                       </Link>
                     </Button>
-                    <DeleteButton label="Delete" message="Delete this notice?" variant="ghost" action={() => deleteNoticeAction(notice.id)} />
+                    <DeleteButton label="Delete" message="Delete this notice?" variant="ghost" action={deleteNoticeAction.bind(null, notice.id)} />
                   </div>
                 </div>
               ))

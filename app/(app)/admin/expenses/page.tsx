@@ -120,7 +120,7 @@ export default async function ExpensesPage({
                               Edit
                             </Link>
                           </Button>
-                          <DeleteButton label="Delete" message="Delete this expense record?" variant="ghost" action={() => deleteOtherExpenseAction(record.id)} />
+                          <DeleteButton label="Delete" message="Delete this expense record?" variant="ghost" action={deleteOtherExpenseAction.bind(null, record.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

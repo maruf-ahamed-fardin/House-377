@@ -110,7 +110,7 @@ export default async function MealsPage({
                                 Edit
                               </Link>
                             </Button>
-                            <DeleteButton label="Delete" message="Delete this meal record?" variant="ghost" action={() => deleteMealRecordAction(record.id)} />
+                            <DeleteButton label="Delete" message="Delete this meal record?" variant="ghost" action={deleteMealRecordAction.bind(null, record.id)} />
                           </div>
                         </TableCell>
                       </TableRow>

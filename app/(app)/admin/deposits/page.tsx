@@ -113,7 +113,7 @@ export default async function DepositsPage({
                               Edit
                             </Link>
                           </Button>
-                          <DeleteButton label="Delete" message="Delete this deposit record?" variant="ghost" action={() => deleteDepositAction(record.id)} />
+                          <DeleteButton label="Delete" message="Delete this deposit record?" variant="ghost" action={deleteDepositAction.bind(null, record.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

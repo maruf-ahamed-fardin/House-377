@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -38,6 +38,12 @@ enum RentDistributionMode {
   PROFILE
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id                      String           @id @default(cuid())
   email                   String           @unique
@@ -51,9 +57,13 @@ model User {
   updatedAt               DateTime         @updatedAt
   memberProfile           MemberProfile?
   messages                ChatMessage[]    @relation("ChatSender")
+  timelinePosts           TimelinePost[]   @relation("TimelineAuthor")
   noticesCreated          Notice[]         @relation("NoticeCreatedBy")
   mealUpdates             MealRecord[]     @relation("MealUpdatedBy")
   bazarExpensesCreated    BazarExpense[]   @relation("BazarCreatedBy")
+  bazarSchedulesCreated   BazarSchedule[]  @relation("BazarScheduleCreatedBy")
+  bazarChangeRequests     BazarScheduleChangeRequest[] @relation("BazarScheduleRequestedBy")
+  bazarChangeRequestsHandled BazarScheduleChangeRequest[] @relation("BazarScheduleHandledBy")
   rentPaymentsCreated     RentPayment[]    @relation("RentPaymentCreatedBy")
   otherExpensesCreated    OtherExpense[]   @relation("OtherExpenseCreatedBy")
   depositsCreated         Deposit[]        @relation("DepositCreatedBy")
@@ -70,13 +80,14 @@ model MemberProfile {
   joiningDate      DateTime
   status           MemberStatus   @default(ACTIVE)
   guardianPhone    String?
-  monthlyRentShare Decimal        @default(0) @db.Decimal(10, 2)
+  monthlyRentShare Decimal        @default(0)
   notes            String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   meals            MealRecord[]
   bazarExpenses    BazarExpense[] @relation("BazarBuyer")
+  bazarSchedules   BazarSchedule[] @relation("BazarScheduleMember")
   rentPayments     RentPayment[]  @relation("RentPayer")
   otherExpenses    OtherExpense[] @relation("OtherExpensePaidBy")
   deposits         Deposit[]      @relation("DepositMember")
@@ -87,9 +98,9 @@ model MealRecord {
   memberId       String
   date           DateTime
   monthKey       String
-  breakfastCount Decimal       @default(0) @db.Decimal(5, 2)
-  lunchCount     Decimal       @default(0) @db.Decimal(5, 2)
-  dinnerCount    Decimal       @default(0) @db.Decimal(5, 2)
+  breakfastCount Decimal       @default(0)
+  lunchCount     Decimal       @default(0)
+  dinnerCount    Decimal       @default(0)
   notes          String?
   updatedById    String
   createdAt      DateTime      @default(now())
@@ -104,9 +115,9 @@ model MealRecord {
 model BazarExpense {
   id          String         @id @default(cuid())
   itemName    String
-  quantity    Decimal        @default(1) @db.Decimal(10, 2)
+  quantity    Decimal        @default(1)
   unit        String?
-  price       Decimal        @db.Decimal(10, 2)
+  price       Decimal
   date        DateTime
   monthKey    String
   boughtById  String?
@@ -125,7 +136,7 @@ model BazarExpense {
 model RentPayment {
   id          String        @id @default(cuid())
   memberId    String
-  amount      Decimal       @db.Decimal(10, 2)
+  amount      Decimal
   date        DateTime
   monthKey    String
   notes       String?
@@ -143,7 +154,7 @@ model OtherExpense {
   id          String          @id @default(cuid())
   title       String
   category    ExpenseCategory
-  amount      Decimal         @db.Decimal(10, 2)
+  amount      Decimal
   date        DateTime
   monthKey    String
   paidById    String?
@@ -161,7 +172,7 @@ model OtherExpense {
 model Deposit {
   id          String        @id @default(cuid())
   memberId    String
-  amount      Decimal       @db.Decimal(10, 2)
+  amount      Decimal
   date        DateTime
   monthKey    String
   purpose     String?
@@ -219,10 +230,63 @@ model ChatMessage {
   @@index([createdAt])
 }
 
+model BazarSchedule {
+  id          String   @id @default(cuid())
+  memberId    String
+  date        DateTime @unique
+  monthKey    String
+  notes       String?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  member      MemberProfile @relation("BazarScheduleMember", fields: [memberId], references: [id], onDelete: Cascade)
+  createdBy   User     @relation("BazarScheduleCreatedBy", fields: [createdById], references: [id])
+  changeRequests BazarScheduleChangeRequest[]
+
+  @@index([monthKey])
+  @@index([memberId])
+}
+
+model BazarScheduleChangeRequest {
+  id               String        @id @default(cuid())
+  scheduleId       String
+  requesterId      String
+  requestedDate    DateTime
+  requestedMonthKey String
+  reason           String
+  status           RequestStatus @default(PENDING)
+  adminNote        String?
+  handledById      String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  schedule         BazarSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  requester        User          @relation("BazarScheduleRequestedBy", fields: [requesterId], references: [id], onDelete: Cascade)
+  handledBy        User?         @relation("BazarScheduleHandledBy", fields: [handledById], references: [id], onDelete: SetNull)
+
+  @@index([scheduleId])
+  @@index([requesterId])
+  @@index([status, createdAt])
+  @@index([requestedMonthKey])
+}
+
+model TimelinePost {
+  id         String   @id @default(cuid())
+  authorId   String
+  title      String?
+  content    String
+  isResolved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  author     User     @relation("TimelineAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([authorId])
+}
+
 model MonthlySummary {
   id                   String               @id @default(cuid())
   monthKey             String               @unique
-  totalHouseRent       Decimal              @default(0) @db.Decimal(10, 2)
+  totalHouseRent       Decimal              @default(0)
   rentDistributionMode RentDistributionMode @default(EQUAL)
   notes                String?
   updatedById          String

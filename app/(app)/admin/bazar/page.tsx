@@ -138,7 +138,7 @@ export default async function BazarPage({
                               Edit
                             </Link>
                           </Button>
-                          <DeleteButton label="Delete" message="Delete this bazar record?" variant="ghost" action={() => deleteBazarExpenseAction(record.id)} />
+                          <DeleteButton label="Delete" message="Delete this bazar record?" variant="ghost" action={deleteBazarExpenseAction.bind(null, record.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

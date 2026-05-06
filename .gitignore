@@ -29,9 +29,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.next-dev-*.txt
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# local Prisma database
+prisma/dev.db*
 
 # vercel
 .vercel

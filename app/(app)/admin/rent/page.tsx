@@ -155,7 +155,7 @@ export default async function RentPage({
                                 Edit
                               </Link>
                             </Button>
-                            <DeleteButton label="Delete" message="Delete this rent payment?" variant="ghost" action={() => deleteRentPaymentAction(payment.id)} />
+                            <DeleteButton label="Delete" message="Delete this rent payment?" variant="ghost" action={deleteRentPaymentAction.bind(null, payment.id)} />
                           </div>
                         </TableCell>
                       </TableRow>

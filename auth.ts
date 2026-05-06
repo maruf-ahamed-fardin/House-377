@@ -7,10 +7,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
 
-const protectedPrefixes = ["/dashboard", "/admin", "/chat", "/profile", "/history"];
+const protectedPrefixes = ["/dashboard", "/admin", "/chat", "/profile", "/history", "/timeline", "/bazar-schedule"];
+const authSecret =
+  process.env.AUTH_SECRET ??
+  process.env.NEXTAUTH_SECRET ??
+  (process.env.NODE_ENV === "production" ? undefined : "messmate-dev-secret");
 
 export const authConfig = {
   trustHost: true,
+  secret: authSecret,
   session: {
     strategy: "jwt",
   },

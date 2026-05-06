@@ -25,6 +25,8 @@ const categories = [
   { value: "OTHER", label: "Other" },
 ] as const;
 
+const UNLINKED_PAYER_VALUE = "__unlinked_payer__";
+
 export function ExpenseForm({
   members,
   initialData,
@@ -112,12 +114,15 @@ export function ExpenseForm({
               control={form.control}
               name="paidById"
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                <Select
+                  value={field.value || UNLINKED_PAYER_VALUE}
+                  onValueChange={(value) => field.onChange(value === UNLINKED_PAYER_VALUE ? "" : value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Optional" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Not linked to a member</SelectItem>
+                    <SelectItem value={UNLINKED_PAYER_VALUE}>Not linked to a member</SelectItem>
                     {members.map((member) => (
                       <SelectItem key={member.value} value={member.value}>
                         {member.label}

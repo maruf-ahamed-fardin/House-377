@@ -253,6 +253,55 @@ export async function getChatMessages(limit = 60) {
   return messages;
 }
 
+export async function getBazarSchedulePageData(userId: string, role: "ADMIN" | "MEMBER", monthKey = getMonthKey()) {
+  const [schedules, requests, options] = await Promise.all([
+    prisma.bazarSchedule.findMany({
+      where: { monthKey },
+      include: {
+        member: {
+          include: memberInclude,
+        },
+        createdBy: true,
+      },
+      orderBy: [{ date: "asc" }, { createdAt: "asc" }],
+    }),
+    prisma.bazarScheduleChangeRequest.findMany({
+      where:
+        role === "ADMIN"
+          ? {
+              OR: [{ schedule: { monthKey } }, { requestedMonthKey: monthKey }],
+            }
+          : {
+              requesterId: userId,
+            },
+      include: {
+        requester: true,
+        handledBy: true,
+        schedule: {
+          include: {
+            member: {
+              include: memberInclude,
+            },
+          },
+        },
+      },
+      orderBy: [{ createdAt: "desc" }],
+    }),
+    getMemberOptions(true),
+  ]);
+
+  return { schedules, requests, options, monthKey };
+}
+
+export async function getTimelinePageData() {
+  return prisma.timelinePost.findMany({
+    include: {
+      author: true,
+    },
+    orderBy: [{ isResolved: "asc" }, { createdAt: "desc" }],
+  });
+}
+
 export async function getHistoryPageData(userId: string, role: "ADMIN" | "MEMBER") {
   return prisma.auditLog.findMany({
     where: role === "ADMIN" ? undefined : { performedById: userId },

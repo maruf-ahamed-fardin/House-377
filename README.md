@@ -1,6 +1,6 @@
 # MessMate
 
-MessMate is a full-stack mess and hostel management system built with Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Prisma, PostgreSQL, and Auth.js credentials authentication.
+MessMate is a full-stack mess and hostel management system built with Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Prisma, SQLite for local persistence, and Auth.js credentials authentication.
 
 It supports:
 
@@ -20,7 +20,7 @@ It supports:
 - Tailwind CSS 4
 - shadcn/ui-style components
 - Prisma ORM
-- PostgreSQL
+- SQLite through Prisma for zero-setup local data
 - Auth.js / NextAuth credentials provider
 - React Hook Form + Zod
 - Recharts
@@ -34,26 +34,29 @@ It supports:
 npm install
 ```
 
-2. Copy the env file and update it for your local PostgreSQL instance
+2. Copy the env file for local development
 
 ```bash
 copy .env.example .env
 ```
 
-3. Generate the Prisma client and create the database schema
+3. Generate the Prisma client, create the local database, and seed demo data
+
+```bash
+npm run db:setup
+```
+
+This creates `prisma/dev.db`, which stores your members, meals, payments, expenses, notices, chat, and monthly report data locally.
+
+You can also run the database commands separately:
 
 ```bash
 npm run db:generate
 npm run db:push
-```
-
-4. Seed demo data
-
-```bash
 npm run db:seed
 ```
 
-5. Start the app
+4. Start the app
 
 ```bash
 npm run dev
@@ -69,9 +72,17 @@ Open `http://localhost:3000`.
 ## Environment Variables
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/messmate"
-AUTH_SECRET="replace-with-a-long-random-secret"
+DATABASE_URL="file:./dev.db"
+AUTH_SECRET="messmate-local-dev-secret-change-before-production"
 AUTH_URL="http://localhost:3000"
+
+NEXT_PUBLIC_FIREBASE_API_KEY="your-firebase-api-key"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-project.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-project.firebasestorage.app"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-messaging-sender-id"
+NEXT_PUBLIC_FIREBASE_APP_ID="your-firebase-app-id"
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID="G-XXXXXXXXXX"
 ```
 
 ## Scripts
@@ -83,6 +94,7 @@ AUTH_URL="http://localhost:3000"
 - `npm run db:generate` regenerates Prisma client
 - `npm run db:push` pushes the Prisma schema to the database
 - `npm run db:migrate` creates a Prisma migration in development
+- `npm run db:setup` creates and seeds the local database in one command
 - `npm run db:seed` inserts demo data
 - `npm run db:studio` opens Prisma Studio
 
@@ -133,4 +145,4 @@ The Prisma schema includes:
 
 - Add PDF export if you want printable month-end statements in addition to CSV
 - Add image domain allowlists in `next.config.ts` if you later enable trusted remote avatar/receipt sources
-- Add Prisma migrations for production instead of relying only on `db:push`
+- Add Prisma migrations and a production database provider before deploying beyond local use

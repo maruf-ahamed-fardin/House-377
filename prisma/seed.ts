@@ -17,6 +17,9 @@ function monthDate(base: Date, day: number) {
 
 async function resetDatabase() {
   await prisma.chatMessage.deleteMany();
+  await prisma.timelinePost.deleteMany();
+  await prisma.bazarScheduleChangeRequest.deleteMany();
+  await prisma.bazarSchedule.deleteMany();
   await prisma.auditLog.deleteMany();
   await prisma.importantInfo.deleteMany();
   await prisma.notice.deleteMany();
@@ -269,6 +272,53 @@ async function main() {
     ],
   });
 
+  const currentSchedules = await Promise.all(
+    memberProfiles.map((member, index) =>
+      prisma.bazarSchedule.create({
+        data: {
+          memberId: member.id,
+          date: monthDate(currentMonthBase, 11 + index),
+          monthKey: currentMonthKey,
+          notes: index % 2 === 0 ? "Morning bazar before classes" : "Evening bazar slot",
+          createdById: admin.id,
+        },
+      }),
+    ),
+  );
+
+  const previousSchedule = await prisma.bazarSchedule.create({
+    data: {
+      memberId: memberProfiles[0].id,
+      date: monthDate(previousMonthBase, 14),
+      monthKey: previousMonthKey,
+      notes: "Previous month sample duty",
+      createdById: admin.id,
+    },
+  });
+
+  await prisma.bazarScheduleChangeRequest.createMany({
+    data: [
+      {
+        scheduleId: currentSchedules[1].id,
+        requesterId: memberUsers[1].id,
+        requestedDate: monthDate(currentMonthBase, 20),
+        requestedMonthKey: currentMonthKey,
+        reason: "Exam day conflict. Need a later bazar date.",
+        status: "PENDING",
+      },
+      {
+        scheduleId: previousSchedule.id,
+        requesterId: memberUsers[0].id,
+        requestedDate: monthDate(previousMonthBase, 16),
+        requestedMonthKey: previousMonthKey,
+        reason: "Travel schedule changed that week.",
+        status: "REJECTED",
+        handledById: admin.id,
+        adminNote: "Could not move because another member was unavailable.",
+      },
+    ],
+  });
+
   await prisma.rentPayment.createMany({
     data: [
       {
@@ -465,6 +515,27 @@ async function main() {
     ],
   });
 
+  await prisma.timelinePost.createMany({
+    data: [
+      {
+        authorId: admin.id,
+        title: "Kitchen tap pressure issue",
+        content: "Water pressure in the kitchen is too low after 8 PM. Please confirm if everyone is seeing the same issue.",
+      },
+      {
+        authorId: memberUsers[2].id,
+        title: "WiFi speed drops at night",
+        content: "Streaming and uploads get very slow after dinner. Sharing this here so others can confirm before we call support.",
+      },
+      {
+        authorId: memberUsers[4].id,
+        title: "Cleaning rotation reminder",
+        content: "The dining space is being left messy after lunch. We should align on the weekly cleaning rotation again.",
+        isResolved: true,
+      },
+    ],
+  });
+
   await prisma.auditLog.createMany({
     data: [
       {
@@ -494,6 +565,20 @@ async function main() {
         entityId: "seed-bazar",
         performedById: admin.id,
         metadata: { monthKey: currentMonthKey, itemCount: 6 },
+      },
+      {
+        action: "BAZAR_SCHEDULE_CREATED",
+        entityType: "BazarSchedule",
+        entityId: currentSchedules[0].id,
+        performedById: admin.id,
+        metadata: { monthKey: currentMonthKey, count: currentSchedules.length },
+      },
+      {
+        action: "TIMELINE_POST_CREATED",
+        entityType: "TimelinePost",
+        entityId: "seed-timeline",
+        performedById: admin.id,
+        metadata: { count: 3 },
       },
       {
         action: "NOTICE_CREATED",
