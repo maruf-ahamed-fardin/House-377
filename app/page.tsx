@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  Activity,
+  BadgeCheck,
   BedDouble,
   BellRing,
+  Building2,
   CalendarClock,
   CheckCircle2,
   CircleDollarSign,
@@ -11,16 +14,17 @@ import {
   LayoutDashboard,
   LineChart,
   LockKeyhole,
-  MessageSquareText,
   ReceiptText,
   ShieldCheck,
   Sparkles,
   UtensilsCrossed,
+  UsersRound,
   WalletCards,
 } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { ThemeSwitcher } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 const metrics = [
@@ -57,15 +61,36 @@ const featureCards = [
 ];
 
 const workflow = [
-  { title: "Collect", description: "Meals, bazar, rent, and deposits are entered daily.", icon: ClipboardList },
-  { title: "Review", description: "Admins see exceptions, pending dues, and member status.", icon: ShieldCheck },
-  { title: "Close", description: "Monthly reports and member balances are ready in minutes.", icon: ReceiptText },
+  {
+    title: "Collect",
+    description: "Meals, bazar, rent, and deposits are entered daily.",
+    label: "Daily input",
+    icon: ClipboardList,
+  },
+  {
+    title: "Review",
+    description: "Admins see exceptions, pending dues, and member status.",
+    label: "Risk check",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Close",
+    description: "Monthly reports and member balances are ready in minutes.",
+    label: "Report ready",
+    icon: ReceiptText,
+  },
 ];
 
 const activityRows = [
   { member: "Rafi Ahmed", room: "B-204", status: "Meal updated", amount: "$42.80" },
   { member: "Nadia Islam", room: "A-118", status: "Deposit cleared", amount: "$120.00" },
   { member: "Tanvir Hasan", room: "C-012", status: "Rent pending", amount: "$86.40" },
+];
+
+const teamViews = [
+  { title: "Admin desk", value: "12 tasks", icon: Building2, tone: "text-cyan-700 dark:text-cyan-200" },
+  { title: "Member app", value: "42 active", icon: UsersRound, tone: "text-emerald-700 dark:text-emerald-200" },
+  { title: "Audit trail", value: "Synced", icon: BadgeCheck, tone: "text-amber-700 dark:text-amber-200" },
 ];
 
 export default async function Home() {
@@ -105,12 +130,15 @@ export default async function Home() {
             Dashboard
           </a>
         </nav>
-        <Button asChild size="sm" className="rounded-full px-4">
-          <Link href="/login">
-            Login
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <ThemeSwitcher />
+          <Button asChild size="sm" className="rounded-full px-4">
+            <Link href="/login">
+              Login
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </div>
       </header>
 
       <section className="mx-auto grid w-full max-w-7xl gap-10 px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
@@ -180,12 +208,12 @@ export default async function Home() {
             </div>
 
             <div className="grid min-h-[560px] bg-slate-50/70 dark:bg-slate-950/40 lg:grid-cols-[176px_1fr]">
-              <aside className="hidden border-r border-slate-200/80 bg-slate-950 p-4 text-white dark:border-white/10 lg:block">
+              <aside className="hidden border-r border-slate-200/80 bg-white p-4 text-slate-700 dark:border-white/10 dark:bg-slate-950 dark:text-white lg:block">
                 <div className="mb-8 flex items-center gap-3">
                   <Image src="/icons/messmate-192.png" alt="" width={36} height={36} className="size-9 rounded-xl" />
                   <div>
                     <p className="text-sm font-semibold">MessMate</p>
-                    <p className="text-xs text-slate-400">Admin suite</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Admin suite</p>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
@@ -193,10 +221,12 @@ export default async function Home() {
                     <div
                       key={item}
                       className={`flex items-center gap-3 rounded-xl px-3 py-2 ${
-                        index === 0 ? "bg-white text-slate-950" : "text-slate-400"
+                        index === 0
+                          ? "bg-cyan-50 text-cyan-950 ring-1 ring-cyan-100 dark:bg-white dark:text-slate-950 dark:ring-0"
+                          : "text-slate-500 dark:text-slate-400"
                       }`}
                     >
-                      <span className={`size-2 rounded-full ${index === 0 ? "bg-emerald-500" : "bg-slate-600"}`} />
+                      <span className={`size-2 rounded-full ${index === 0 ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"}`} />
                       {item}
                     </div>
                   ))}
@@ -209,8 +239,8 @@ export default async function Home() {
                     <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Workspace</p>
                     <h2 className="text-2xl font-semibold tracking-tight">Campus Nest Hostel</h2>
                   </div>
-                  <div className="flex w-fit items-center gap-2 rounded-full border border-slate-950/10 bg-slate-950 px-3 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/10 dark:border-white/15 dark:bg-white dark:text-slate-950">
-                    <span className="flex size-5 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300 dark:bg-emerald-500/15 dark:text-emerald-600">
+                  <div className="flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800 shadow-sm shadow-emerald-900/5 dark:border-white/15 dark:bg-white dark:text-slate-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-emerald-500/12 text-emerald-600 dark:bg-emerald-500/15">
                       <LockKeyhole className="size-3.5" />
                     </span>
                     Admin access
@@ -230,7 +260,7 @@ export default async function Home() {
                         key={item.label}
                         className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 dark:border-white/10 dark:bg-white/5"
                       >
-                        <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                        <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-slate-100 text-slate-950 dark:bg-white dark:text-slate-950">
                           <Icon className="size-4" />
                         </div>
                         <p className="text-xl font-semibold">{item.value}</p>
@@ -267,13 +297,13 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-slate-200 bg-slate-950 p-4 text-white shadow-sm shadow-slate-900/10 dark:border-white/10">
+                  <div className="rounded-3xl border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-amber-50 p-4 text-slate-950 shadow-sm shadow-slate-900/10 dark:border-white/10 dark:bg-none dark:bg-slate-950 dark:text-white">
                     <div className="mb-5 flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold">Monthly close</h3>
-                        <p className="text-sm text-slate-400">Finance health</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Finance health</p>
                       </div>
-                      <CheckCircle2 className="size-5 text-emerald-300" />
+                      <CheckCircle2 className="size-5 text-emerald-500 dark:text-emerald-300" />
                     </div>
                     <div className="flex h-36 items-end gap-2">
                       {[42, 66, 54, 78, 60, 88, 74, 95].map((height, index) => (
@@ -284,7 +314,7 @@ export default async function Home() {
                         />
                       ))}
                     </div>
-                    <div className="mt-5 rounded-2xl bg-white/10 p-3 text-sm text-slate-300">
+                    <div className="mt-5 rounded-2xl bg-white/80 p-3 text-sm text-slate-600 shadow-sm shadow-slate-900/5 dark:bg-white/10 dark:text-slate-300">
                       94% dues collected before monthly report generation.
                     </div>
                   </div>
@@ -331,63 +361,175 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="workflow" className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-stretch">
-          <div className="rounded-3xl border border-white/80 bg-slate-950 p-6 text-white shadow-xl shadow-slate-900/15 dark:border-white/10">
-            <div className="mb-8 flex size-12 items-center justify-center rounded-2xl bg-white text-slate-950">
+      <section id="workflow" className="border-y border-slate-200/80 bg-white py-14 text-slate-950 dark:border-white/10 dark:bg-slate-950 dark:text-white sm:py-18">
+        <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:px-8">
+          <div className="space-y-6">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
               <LayoutDashboard className="size-5" />
             </div>
-            <h2 className="text-3xl font-semibold tracking-tight">Close the month without chasing spreadsheets.</h2>
-            <p className="mt-4 text-base leading-7 text-slate-300">
-              MessMate keeps operational data structured from day one, so admins can review, approve, and publish final
-              balances from the same place members already use.
-            </p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {["Role-based dashboard", "Automated balance logic", "Notices and chat included"].map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium">
-                  <CheckCircle2 className="size-4 text-emerald-300" />
-                  {item}
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-300">
+                Closing pipeline
+              </p>
+              <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
+                Review the whole month from one operational timeline.
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
+                Every meal, payment, rent item, and member update lands in a structured flow before final statements go
+                out.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3 lg:max-w-xl">
+              {["Role-ready views", "Auto balance logic", "Chat and notices"].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/8"
+                >
+                  <CheckCircle2 className="mb-3 size-4 text-emerald-600 dark:text-emerald-300" />
+                  <p className="text-sm font-semibold">{item}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            {workflow.map((step, index) => {
-              const Icon = step.icon;
+          <div className="relative">
+            <div className="absolute left-6 top-8 hidden h-[calc(100%-4rem)] w-px bg-cyan-200 sm:block dark:bg-cyan-300/25" />
+            <div className="space-y-4">
+              {workflow.map((step, index) => {
+                const Icon = step.icon;
 
-              return (
-                <article
-                  key={step.title}
-                  className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-sm shadow-slate-900/5 backdrop-blur dark:border-white/10 dark:bg-white/5"
-                >
-                  <div className="mb-8 flex items-center justify-between">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                return (
+                  <article
+                    key={step.title}
+                    className="relative grid gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm shadow-slate-900/5 backdrop-blur dark:border-white/10 dark:bg-white/8 sm:grid-cols-[3rem_1fr_auto] sm:items-center sm:p-5"
+                  >
+                    <div className="z-10 flex size-12 items-center justify-center rounded-2xl bg-white text-slate-950 shadow-sm shadow-slate-900/5 dark:shadow-none">
                       <Icon className="size-5" />
                     </div>
-                    <span className="font-mono text-sm font-semibold text-slate-400">0{index + 1}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
-                </article>
-              );
-            })}
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="font-mono text-xs font-semibold text-cyan-700 dark:text-cyan-200">0{index + 1}</span>
+                        <h3 className="text-xl font-semibold">{step.title}</h3>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
+                    </div>
+                    <div className="w-fit rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 dark:border-amber-300/25 dark:bg-amber-300/10 dark:text-amber-100">
+                      {step.label}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
-        <div className="flex flex-col gap-5 rounded-[2rem] border border-white/80 bg-white/80 p-6 shadow-xl shadow-slate-900/10 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:p-8 dark:border-white/10 dark:bg-white/5">
-          <div>
-            <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">Ready for a sharper dashboard?</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Open MessMate and run the workspace.</h2>
+      <section className="bg-[#f5f7fb] py-16 dark:bg-slate-950 sm:py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700 dark:text-cyan-300">
+                Team command room
+              </p>
+              <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
+                A calmer view for admins, residents, and monthly finance.
+              </h2>
+            </div>
+            <div className="flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 dark:border-emerald-300/20 dark:bg-emerald-300/10 dark:text-emerald-100">
+              <Activity className="size-4" />
+              Live operations snapshot
+            </div>
           </div>
-          <Button asChild size="lg" className="h-12 rounded-full px-6">
-            <Link href="/login">
-              Continue to Login
-              <MessageSquareText className="size-4" />
-            </Link>
-          </Button>
+
+          <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl shadow-slate-900/8 dark:border-white/10 dark:bg-white/5">
+              <div className="grid gap-0 md:grid-cols-3">
+                {teamViews.map((view) => {
+                  const Icon = view.icon;
+
+                  return (
+                    <div
+                      key={view.title}
+                      className="border-b border-slate-200 p-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 dark:border-white/10"
+                    >
+                      <div className={`mb-5 flex size-12 items-center justify-center rounded-2xl bg-slate-100 ${view.tone} dark:bg-white/10`}>
+                        <Icon className="size-5" />
+                      </div>
+                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{view.title}</p>
+                      <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">{view.value}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="border-t border-slate-200 p-5 dark:border-white/10 sm:p-6">
+                <div className="grid gap-4 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+                  <div>
+                    <h3 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                      Everything important stays visible.
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      Admins can see who paid, who needs attention, what changed today, and what is ready for report
+                      generation.
+                    </p>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      ["Rent collection", "86%"],
+                      ["Meal audit", "Ready"],
+                      ["Notice reach", "41 / 42"],
+                    ].map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
+                      >
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</span>
+                        <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white dark:bg-white dark:text-slate-950">
+                          {value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-[2rem] border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-5 text-slate-950 shadow-xl shadow-slate-900/8 dark:border-white/10 dark:bg-none dark:bg-slate-950 dark:text-white">
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-200">Member pulse</p>
+                    <h3 className="mt-1 text-2xl font-semibold tracking-tight">Residents stay informed.</h3>
+                  </div>
+                  <BellRing className="size-5 text-amber-500 dark:text-amber-300" />
+                </div>
+                <div className="space-y-3">
+                  {["Dinner count updated", "Deposit receipt shared", "Room B notice pinned"].map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-900/5 dark:border-0 dark:bg-white/10 dark:text-slate-100"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/8 dark:border-white/10 dark:bg-white/5">
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Finance confidence</p>
+                <div className="mt-4 flex items-end gap-3">
+                  <p className="text-5xl font-semibold tracking-tight text-slate-950 dark:text-white">94%</p>
+                  <p className="pb-1 text-sm font-medium text-slate-500 dark:text-slate-400">dues reconciled</p>
+                </div>
+                <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
+                  <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-cyan-500 via-emerald-400 to-amber-300" />
+                </div>
+                <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  A clear month-end state without hunting through messages or sheets.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
