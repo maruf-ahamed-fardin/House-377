@@ -38,16 +38,16 @@ export function Topbar({ user }: { user: Session["user"] }) {
   }, [pathname, user.role]);
 
   return (
-    <header className="sticky top-0 z-20 mb-8 rounded-[2rem] border border-white/60 bg-white/75 px-4 py-4 shadow-lg shadow-slate-900/5 backdrop-blur xl:px-6 dark:border-white/10 dark:bg-slate-950/70">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 mb-5 rounded-2xl border border-white/60 bg-white/75 px-3 py-3 shadow-lg shadow-slate-900/5 backdrop-blur sm:mb-8 sm:rounded-[2rem] sm:px-4 sm:py-4 xl:px-6 dark:border-white/10 dark:bg-slate-950/70">
+      <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-3">
           <MobileSidebar user={user} />
-          <div>
-            <p className="text-lg font-semibold">{currentPage.title}</p>
-            <p className="text-sm text-muted-foreground">{currentPage.subtitle}</p>
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold sm:text-lg">{currentPage.title}</p>
+            <p className="truncate text-xs text-muted-foreground sm:text-sm">{currentPage.subtitle}</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <ThemeToggle />
           <UserNav user={user} />
         </div>

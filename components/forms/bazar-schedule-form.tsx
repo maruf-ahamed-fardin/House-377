@@ -91,7 +91,7 @@ export function BazarScheduleForm({
             <Label htmlFor="schedule-notes">Notes</Label>
             <Textarea id="schedule-notes" placeholder="Optional reminders or constraints" {...form.register("notes")} />
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : "Save schedule"}
             </Button>

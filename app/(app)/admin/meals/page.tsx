@@ -47,8 +47,8 @@ export default async function MealsPage({
         title="Meal Management"
         description={`Daily breakfast, lunch, and dinner counts for ${formatMonthLabel(monthKey)} with live meal-rate calculation.`}
         action={
-          <form className="flex items-center gap-3" method="GET">
-            <Input className="w-[180px]" type="month" name="month" defaultValue={monthKey} />
+          <form className="flex flex-wrap items-center gap-3" method="GET">
+            <Input className="w-full sm:w-[180px]" type="month" name="month" defaultValue={monthKey} />
             <Button type="submit" variant="outline">
               Filter month
             </Button>

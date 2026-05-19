@@ -137,7 +137,7 @@ export function ExpenseForm({
             <Label htmlFor="expense-notes">Notes</Label>
             <Textarea id="expense-notes" {...form.register("notes")} />
           </div>
-          <div className="md:col-span-2 flex gap-3">
+          <div className="flex flex-wrap gap-3 md:col-span-2">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : "Save expense"}
             </Button>

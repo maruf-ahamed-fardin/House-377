@@ -94,7 +94,7 @@ export function RentPaymentForm({
             <Label htmlFor="rent-payment-notes">Notes</Label>
             <Textarea id="rent-payment-notes" {...form.register("notes")} />
           </div>
-          <div className="md:col-span-2 flex gap-3">
+          <div className="flex flex-wrap gap-3 md:col-span-2">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : "Save rent payment"}
             </Button>

@@ -94,8 +94,8 @@ export function NoticeForm({
             <Label htmlFor="notice-description">Description</Label>
             <Textarea id="notice-description" className="min-h-[180px]" {...form.register("description")} />
           </div>
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/70 px-4 py-3">
-            <div>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/70 px-4 py-3">
+            <div className="min-w-0">
               <p className="text-sm font-medium">Visible to members</p>
               <p className="text-xs text-muted-foreground">Turn this off to save a draft without publishing it.</p>
             </div>
@@ -105,7 +105,7 @@ export function NoticeForm({
               render={({ field }) => <Switch checked={field.value} onCheckedChange={field.onChange} />}
             />
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : "Save notice"}
             </Button>

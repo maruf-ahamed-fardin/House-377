@@ -96,8 +96,8 @@ export function ImportantInfoForm({
             <Label htmlFor="info-notes">Other notes</Label>
             <Textarea id="info-notes" {...form.register("otherNotes")} />
           </div>
-          <div className="md:col-span-2 flex items-center justify-between rounded-2xl border border-border/70 bg-background/70 px-4 py-3">
-            <div>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/70 px-4 py-3 md:col-span-2">
+            <div className="min-w-0">
               <p className="text-sm font-medium">Allow members to view</p>
               <p className="text-xs text-muted-foreground">Turn this on if the information should be visible in member profile/dashboard screens.</p>
             </div>

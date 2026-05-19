@@ -10,7 +10,7 @@ export function ExpenseBreakdownChart({
   data: { name: string; value: number }[];
 }) {
   return (
-    <div className="h-[320px] w-full">
+    <div className="h-[260px] w-full sm:h-[320px]">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie data={data} dataKey="value" nameKey="name" innerRadius={75} outerRadius={110} paddingAngle={4}>

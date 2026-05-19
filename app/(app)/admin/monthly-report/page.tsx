@@ -30,8 +30,8 @@ export default async function MonthlyReportPage({
         title="Monthly Final Calculation"
         description={`Full month-end settlement for ${formatMonthLabel(report.monthKey)} across meals, bazar, rent, expenses, and member balances.`}
         action={
-          <form className="flex items-center gap-3" method="GET">
-            <Input className="w-[180px]" type="month" name="month" defaultValue={report.monthKey} />
+          <form className="flex flex-wrap items-center gap-3" method="GET">
+            <Input className="w-full sm:w-[180px]" type="month" name="month" defaultValue={report.monthKey} />
             <Button type="submit" variant="outline">
               Apply month
             </Button>

@@ -34,8 +34,8 @@ export default async function BazarSchedulePage({
         title="Bazar Schedule"
         description={`See who will handle bazar on which day for ${formatMonthLabel(monthKey)} and request a date change if needed.`}
         action={
-          <form className="flex items-center gap-3" method="GET">
-            <Input className="w-[180px]" type="month" name="month" defaultValue={monthKey} />
+          <form className="flex flex-wrap items-center gap-3" method="GET">
+            <Input className="w-full sm:w-[180px]" type="month" name="month" defaultValue={monthKey} />
             <Button type="submit" variant="outline">
               Apply month
             </Button>
@@ -124,8 +124,8 @@ export default async function BazarSchedulePage({
               {data.requests.length ? (
                 data.requests.map((request) => (
                   <div key={request.id} className="rounded-3xl border border-border/70 bg-background/70 p-4">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <div>
+                    <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0">
                         <p className="font-medium">
                           {formatDate(request.schedule.date)} to {formatDate(request.requestedDate)}
                         </p>

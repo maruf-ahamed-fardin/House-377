@@ -52,23 +52,23 @@ export function ChatPanel({ initialMessages }: { initialMessages: MessageWithSen
           <CardDescription>Messages refresh automatically every few seconds.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[560px] pr-4">
+          <ScrollArea className="h-[60vh] min-h-[320px] pr-3 sm:pr-4 lg:h-[560px]">
             <div className="space-y-4">
               {messages.map((message) => (
                 <div key={message.id} className="rounded-3xl border border-border/70 bg-background/70 p-4">
-                  <div className="mb-3 flex items-center gap-3">
+                  <div className="mb-3 flex min-w-0 items-center gap-3">
                     <Avatar>
                       <AvatarImage src={message.sender.image ?? undefined} alt={message.sender.name} />
                       <AvatarFallback>{getInitials(message.sender.name)}</AvatarFallback>
                     </Avatar>
-                    <div>
-                      <p className="font-medium">{message.sender.name}</p>
-                      <p className="text-xs text-muted-foreground">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{message.sender.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">
                         {message.sender.role} | {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}
                       </p>
                     </div>
                   </div>
-                  <p className="text-sm leading-7">{message.content}</p>
+                  <p className="break-words text-sm leading-7">{message.content}</p>
                 </div>
               ))}
             </div>

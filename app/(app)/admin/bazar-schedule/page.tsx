@@ -46,8 +46,8 @@ export default async function AdminBazarSchedulePage({
         title="Bazar Schedule"
         description={`Assign who will handle bazar on which day for ${formatMonthLabel(monthKey)} and review change requests from members.`}
         action={
-          <form className="flex items-center gap-3" method="GET">
-            <Input className="w-[180px]" type="month" name="month" defaultValue={monthKey} />
+          <form className="flex flex-wrap items-center gap-3" method="GET">
+            <Input className="w-full sm:w-[180px]" type="month" name="month" defaultValue={monthKey} />
             <Button type="submit" variant="outline">
               Apply month
             </Button>

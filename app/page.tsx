@@ -1,32 +1,71 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BedDouble, BellRing, ChartNoAxesCombined, UtensilsCrossed, Wallet } from "lucide-react";
+import {
+  ArrowRight,
+  BedDouble,
+  BellRing,
+  CalendarClock,
+  CheckCircle2,
+  CircleDollarSign,
+  ClipboardList,
+  LayoutDashboard,
+  LineChart,
+  LockKeyhole,
+  MessageSquareText,
+  ReceiptText,
+  ShieldCheck,
+  Sparkles,
+  UtensilsCrossed,
+  WalletCards,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+const metrics = [
+  { label: "Meals logged", value: "1,248", trend: "+18%" },
+  { label: "Monthly dues", value: "$3.8k", trend: "96%" },
+  { label: "Active members", value: "42", trend: "+6" },
+];
 
 const featureCards = [
   {
     title: "Mess Operations",
-    description: "Track daily meals, bazar spending, deposits, rent, and monthly balances with one clean workflow.",
+    description: "Meals, bazar spending, deposits, rent, and monthly balances move through one clean workflow.",
     icon: UtensilsCrossed,
+    tone: "bg-amber-500/12 text-amber-700 dark:text-amber-200",
   },
   {
     title: "Member Lifecycle",
-    description: "Manage residents, rooms, joining details, guardian contacts, and activation status from a single admin hub.",
+    description: "Manage rooms, joining details, guardian contacts, and activation status from a single admin hub.",
     icon: BedDouble,
+    tone: "bg-cyan-500/12 text-cyan-700 dark:text-cyan-200",
   },
   {
     title: "Financial Clarity",
-    description: "Automatically calculate meal rate, dues, reimbursements, and member-level monthly statements.",
-    icon: Wallet,
+    description: "Calculate meal rate, dues, reimbursements, and monthly statements without spreadsheet drift.",
+    icon: WalletCards,
+    tone: "bg-emerald-500/12 text-emerald-700 dark:text-emerald-200",
   },
   {
     title: "Shared Communication",
-    description: "Post notices, keep secure important info, and run an internal group chat without leaving the dashboard.",
+    description: "Post notices, save important info, and run internal chat without leaving the dashboard.",
     icon: BellRing,
+    tone: "bg-rose-500/12 text-rose-700 dark:text-rose-200",
   },
+];
+
+const workflow = [
+  { title: "Collect", description: "Meals, bazar, rent, and deposits are entered daily.", icon: ClipboardList },
+  { title: "Review", description: "Admins see exceptions, pending dues, and member status.", icon: ShieldCheck },
+  { title: "Close", description: "Monthly reports and member balances are ready in minutes.", icon: ReceiptText },
+];
+
+const activityRows = [
+  { member: "Rafi Ahmed", room: "B-204", status: "Meal updated", amount: "$42.80" },
+  { member: "Nadia Islam", room: "A-118", status: "Deposit cleared", amount: "$120.00" },
+  { member: "Tanvir Hasan", room: "C-012", status: "Rent pending", amount: "$86.40" },
 ];
 
 export default async function Home() {
@@ -37,84 +76,319 @@ export default async function Home() {
   }
 
   return (
-    <main className="relative overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-[480px] bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.18),transparent_40%),radial-gradient(circle_at_top_right,rgba(14,165,233,0.18),transparent_35%),linear-gradient(180deg,rgba(15,23,42,0.05),transparent_65%)]" />
-      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center gap-16 px-6 py-16 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/80 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-200">
-              <ChartNoAxesCombined className="size-4 text-amber-600" />
-              Built for modern mess and hostel teams
-            </div>
-            <div className="space-y-5">
-              <h1 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl dark:text-white">
-                MessMate keeps meals, money, and members in one polished workflow.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-                A full-stack dashboard for student mess and hostel management with role-based access, monthly reports,
-                notices, chat, and accurate financial calculations.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Button asChild size="lg" className="h-12 rounded-full px-6">
-                <Link href="/login">
-                  Open MessMate
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 rounded-full px-6">
-                <a href="#features">Explore Features</a>
-              </Button>
-            </div>
-          </div>
-          <Card className="border-white/60 bg-white/80 shadow-2xl shadow-slate-900/10 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
-            <CardHeader className="pb-6">
-              <CardTitle className="text-2xl">Why teams like it</CardTitle>
-              <CardDescription>
-                Faster monthly closing, fewer spreadsheet mistakes, and a cleaner experience for both admins and members.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              {featureCards.map((feature) => {
-                const Icon = feature.icon;
+    <main className="relative min-h-screen overflow-hidden bg-[#f5f7fb] text-slate-950 dark:bg-slate-950 dark:text-white">
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(135deg,rgba(15,23,42,0.05)_0%,transparent_34%),radial-gradient(circle_at_18%_12%,rgba(20,184,166,0.16),transparent_32%),radial-gradient(circle_at_84%_8%,rgba(245,158,11,0.18),transparent_28%),radial-gradient(circle_at_88%_78%,rgba(14,165,233,0.14),transparent_30%)] dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.74),rgba(15,23,42,0.96)),radial-gradient(circle_at_18%_12%,rgba(20,184,166,0.18),transparent_34%),radial-gradient(circle_at_84%_8%,rgba(245,158,11,0.18),transparent_28%),radial-gradient(circle_at_88%_78%,rgba(14,165,233,0.16),transparent_30%)]" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40 dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
 
-                return (
-                  <div
-                    key={feature.title}
-                    className="rounded-3xl border border-slate-200/80 bg-slate-50/80 p-5 transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-white/5"
-                  >
-                    <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-900">
-                      <Icon className="size-5" />
-                    </div>
-                    <h2 className="text-lg font-semibold">{feature.title}</h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{feature.description}</p>
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
+      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="MessMate home">
+          <Image
+            src="/icons/messmate-192.png"
+            alt=""
+            width={40}
+            height={40}
+            className="size-10 rounded-2xl shadow-lg shadow-amber-500/20"
+          />
+          <div className="leading-tight">
+            <p className="text-base font-bold tracking-tight">MessMate</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Hostel CRM</p>
+          </div>
+        </Link>
+        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
+          <a href="#features" className="transition hover:text-slate-950 dark:hover:text-white">
+            Features
+          </a>
+          <a href="#workflow" className="transition hover:text-slate-950 dark:hover:text-white">
+            Workflow
+          </a>
+          <a href="#dashboard" className="transition hover:text-slate-950 dark:hover:text-white">
+            Dashboard
+          </a>
+        </nav>
+        <Button asChild size="sm" className="rounded-full px-4">
+          <Link href="/login">
+            Login
+            <ArrowRight className="size-4" />
+          </Link>
+        </Button>
+      </header>
+
+      <section className="mx-auto grid w-full max-w-7xl gap-10 px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
+        <div className="space-y-8">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-4 py-2 text-sm font-semibold text-amber-950 shadow-sm shadow-amber-900/5 backdrop-blur dark:border-amber-300/25 dark:bg-amber-300/10 dark:text-amber-50">
+            <Sparkles className="size-4 text-amber-600 dark:text-amber-300" />
+            Built for modern mess and hostel teams
+          </div>
+
+          <div className="space-y-5">
+            <h1 className="max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
+              Turn mess management into a clean CRM workspace.
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+              MessMate brings members, meals, rent, deposits, reports, notices, and chat into one polished operating
+              system for student hostels.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button asChild size="lg" className="h-12 rounded-full px-6">
+              <Link href="/login">
+                Open MessMate
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-12 rounded-full border-slate-950/10 bg-slate-950 px-6 text-white shadow-sm shadow-slate-900/10 hover:bg-slate-800 dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-50 dark:hover:bg-cyan-300/15"
+            >
+              <a href="#features">Explore Features</a>
+            </Button>
+          </div>
+
+          <div className="grid max-w-2xl gap-3 sm:grid-cols-3">
+            {metrics.map((metric) => (
+              <div
+                key={metric.label}
+                className="rounded-2xl border border-white/80 bg-white/70 p-4 shadow-sm shadow-slate-900/5 backdrop-blur dark:border-white/10 dark:bg-white/5"
+              >
+                <p className="text-2xl font-semibold tracking-tight">{metric.value}</p>
+                <div className="mt-1 flex items-center justify-between gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <span>{metric.label}</span>
+                  <span className="rounded-full bg-emerald-500/12 px-2 py-1 text-emerald-700 dark:text-emerald-300">
+                    {metric.trend}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <section id="features" className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <section id="dashboard" aria-label="MessMate dashboard preview" className="relative">
+          <div className="absolute -inset-4 rounded-[2rem] bg-slate-950/10 blur-3xl dark:bg-cyan-500/10" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white/90 shadow-2xl shadow-slate-900/15 backdrop-blur dark:border-white/10 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between border-b border-slate-200/80 px-5 py-4 dark:border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="size-3 rounded-full bg-rose-400" />
+                <span className="size-3 rounded-full bg-amber-400" />
+                <span className="size-3 rounded-full bg-emerald-400" />
+              </div>
+              <div className="hidden rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-xs font-semibold text-slate-500 dark:border-white/10 dark:bg-white/6 dark:text-slate-300 sm:block">
+                May 2026 Operations
+              </div>
+            </div>
+
+            <div className="grid min-h-[560px] bg-slate-50/70 dark:bg-slate-950/40 lg:grid-cols-[176px_1fr]">
+              <aside className="hidden border-r border-slate-200/80 bg-slate-950 p-4 text-white dark:border-white/10 lg:block">
+                <div className="mb-8 flex items-center gap-3">
+                  <Image src="/icons/messmate-192.png" alt="" width={36} height={36} className="size-9 rounded-xl" />
+                  <div>
+                    <p className="text-sm font-semibold">MessMate</p>
+                    <p className="text-xs text-slate-400">Admin suite</p>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  {["Overview", "Members", "Meals", "Finance", "Chat"].map((item, index) => (
+                    <div
+                      key={item}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2 ${
+                        index === 0 ? "bg-white text-slate-950" : "text-slate-400"
+                      }`}
+                    >
+                      <span className={`size-2 rounded-full ${index === 0 ? "bg-emerald-500" : "bg-slate-600"}`} />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </aside>
+
+              <div className="min-w-0 p-4 sm:p-5">
+                <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Workspace</p>
+                    <h2 className="text-2xl font-semibold tracking-tight">Campus Nest Hostel</h2>
+                  </div>
+                  <div className="flex w-fit items-center gap-2 rounded-full border border-slate-950/10 bg-slate-950 px-3 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/10 dark:border-white/15 dark:bg-white dark:text-slate-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300 dark:bg-emerald-500/15 dark:text-emerald-600">
+                      <LockKeyhole className="size-3.5" />
+                    </span>
+                    Admin access
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {[
+                    { label: "Meal Rate", value: "$2.84", icon: LineChart },
+                    { label: "Collected", value: "$2,930", icon: CircleDollarSign },
+                    { label: "Open Tasks", value: "18", icon: CalendarClock },
+                  ].map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 dark:border-white/10 dark:bg-white/5"
+                      >
+                        <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                          <Icon className="size-4" />
+                        </div>
+                        <p className="text-xl font-semibold">{item.value}</p>
+                        <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{item.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 dark:border-white/10 dark:bg-white/5">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      <div>
+                        <h3 className="font-semibold">Member activity</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Live CRM-style resident ledger</p>
+                      </div>
+                      <span className="rounded-full bg-emerald-500/12 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                        Synced
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {activityRows.map((row) => (
+                        <div
+                          key={row.member}
+                          className="grid grid-cols-[1fr_auto] gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-3 py-3 dark:border-white/10 dark:bg-slate-950/50"
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-semibold">{row.member}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">{row.room} - {row.status}</p>
+                          </div>
+                          <p className="text-sm font-semibold">{row.amount}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-3xl border border-slate-200 bg-slate-950 p-4 text-white shadow-sm shadow-slate-900/10 dark:border-white/10">
+                    <div className="mb-5 flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold">Monthly close</h3>
+                        <p className="text-sm text-slate-400">Finance health</p>
+                      </div>
+                      <CheckCircle2 className="size-5 text-emerald-300" />
+                    </div>
+                    <div className="flex h-36 items-end gap-2">
+                      {[42, 66, 54, 78, 60, 88, 74, 95].map((height, index) => (
+                        <div
+                          key={height + index}
+                          className="flex-1 rounded-t-xl bg-gradient-to-t from-cyan-500 to-amber-300"
+                          style={{ height: `${height}%` }}
+                        />
+                      ))}
+                    </div>
+                    <div className="mt-5 rounded-2xl bg-white/10 p-3 text-sm text-slate-300">
+                      94% dues collected before monthly report generation.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="features" className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-300">
+              CRM for mess teams
+            </p>
+            <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+              One workspace for the full resident journey.
+            </h2>
+          </div>
+          <p className="max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
+            The dashboard behaves like a real operations CRM: every member has context, every transaction has a trail,
+            and monthly close stays predictable.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {featureCards.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <Card
+              <article
                 key={feature.title}
-                className="border-white/60 bg-white/70 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-white/10 dark:bg-slate-950/70"
+                className="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-sm shadow-slate-900/5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 dark:border-white/10 dark:bg-white/5"
               >
-                <CardHeader>
-                  <div className="mb-2 flex size-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-200">
-                    <Icon className="size-5" />
-                  </div>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-              </Card>
+                <div className={`mb-5 flex size-12 items-center justify-center rounded-2xl ${feature.tone}`}>
+                  <Icon className="size-5" />
+                </div>
+                <h3 className="text-lg font-semibold">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{feature.description}</p>
+              </article>
             );
           })}
-        </section>
+        </div>
+      </section>
+
+      <section id="workflow" className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-stretch">
+          <div className="rounded-3xl border border-white/80 bg-slate-950 p-6 text-white shadow-xl shadow-slate-900/15 dark:border-white/10">
+            <div className="mb-8 flex size-12 items-center justify-center rounded-2xl bg-white text-slate-950">
+              <LayoutDashboard className="size-5" />
+            </div>
+            <h2 className="text-3xl font-semibold tracking-tight">Close the month without chasing spreadsheets.</h2>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              MessMate keeps operational data structured from day one, so admins can review, approve, and publish final
+              balances from the same place members already use.
+            </p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {["Role-based dashboard", "Automated balance logic", "Notices and chat included"].map((item) => (
+                <div key={item} className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium">
+                  <CheckCircle2 className="size-4 text-emerald-300" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {workflow.map((step, index) => {
+              const Icon = step.icon;
+
+              return (
+                <article
+                  key={step.title}
+                  className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-sm shadow-slate-900/5 backdrop-blur dark:border-white/10 dark:bg-white/5"
+                >
+                  <div className="mb-8 flex items-center justify-between">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                      <Icon className="size-5" />
+                    </div>
+                    <span className="font-mono text-sm font-semibold text-slate-400">0{index + 1}</span>
+                  </div>
+                  <h3 className="text-xl font-semibold">{step.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
+        <div className="flex flex-col gap-5 rounded-[2rem] border border-white/80 bg-white/80 p-6 shadow-xl shadow-slate-900/10 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:p-8 dark:border-white/10 dark:bg-white/5">
+          <div>
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">Ready for a sharper dashboard?</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Open MessMate and run the workspace.</h2>
+          </div>
+          <Button asChild size="lg" className="h-12 rounded-full px-6">
+            <Link href="/login">
+              Continue to Login
+              <MessageSquareText className="size-4" />
+            </Link>
+          </Button>
+        </div>
       </section>
     </main>
   );

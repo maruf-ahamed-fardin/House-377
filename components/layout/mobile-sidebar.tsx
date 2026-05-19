@@ -11,7 +11,7 @@ export function MobileSidebar({ user }: { user: Session["user"] }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden">
+        <Button variant="outline" size="icon" className="shrink-0 md:hidden">
           <Menu className="size-4" />
         </Button>
       </DialogTrigger>

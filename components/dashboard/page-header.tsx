@@ -12,12 +12,12 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+    <div className="mb-6 flex min-w-0 flex-col gap-4 sm:mb-8 lg:flex-row lg:items-end lg:justify-between">
+      <div className="min-w-0 space-y-2">
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
         <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>
       </div>
-      {action ? <div className="flex shrink-0 items-center gap-3">{action}</div> : null}
+      {action ? <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap lg:w-auto lg:shrink-0 lg:items-center lg:justify-end">{action}</div> : null}
     </div>
   );
 }

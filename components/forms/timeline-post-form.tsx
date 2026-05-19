@@ -75,7 +75,7 @@ export function TimelinePostForm({
             />
             {form.formState.errors.content ? <p className="text-xs text-destructive">{form.formState.errors.content.message}</p> : null}
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : initialData?.id ? "Update post" : "Publish post"}
             </Button>

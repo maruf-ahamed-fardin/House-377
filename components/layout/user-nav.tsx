@@ -28,13 +28,13 @@ export function UserNav({ user }: { user: Session["user"] }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-3 rounded-full border border-border/80 bg-card/70 px-2.5 py-1.5 shadow-sm transition-colors hover:bg-accent/70">
+        <button className="flex min-w-0 items-center gap-2 rounded-full border border-border/80 bg-card/70 px-2 py-1.5 shadow-sm transition-colors hover:bg-accent/70 sm:gap-3 sm:px-2.5">
           <Avatar className="size-9">
             <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
-          <div className="hidden text-left sm:block">
-            <p className="text-sm font-semibold">{user.name}</p>
+          <div className="hidden max-w-36 min-w-0 text-left sm:block lg:max-w-48">
+            <p className="truncate text-sm font-semibold">{user.name}</p>
             <p className="text-xs text-muted-foreground">{user.role}</p>
           </div>
         </button>

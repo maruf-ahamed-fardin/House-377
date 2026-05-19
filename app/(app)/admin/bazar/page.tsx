@@ -17,7 +17,7 @@ import { requireAdmin } from "@/lib/rbac";
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 const filterSelectClassName =
-  "flex h-10 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
+  "flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:w-auto";
 
 export default async function BazarPage({
   searchParams,
@@ -57,7 +57,7 @@ export default async function BazarPage({
         description={`Track বাজার purchases, buyer contributions, receipts, and food spend for ${formatMonthLabel(monthKey)}.`}
         action={
           <form className="flex flex-wrap items-center gap-3" method="GET">
-            <Input className="w-[180px]" type="month" name="month" defaultValue={monthKey} />
+            <Input className="w-full sm:w-[180px]" type="month" name="month" defaultValue={monthKey} />
             <select className={filterSelectClassName} name="member" defaultValue={selectedMemberId}>
               <option value="">All members</option>
               {data.options.map((member) => (
