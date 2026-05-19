@@ -101,43 +101,45 @@ export default async function Home() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f5f7fb] text-slate-950 dark:bg-slate-950 dark:text-white">
+    <main className="relative min-h-screen overflow-x-clip bg-[#f5f7fb] text-slate-950 dark:bg-slate-950 dark:text-white">
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(135deg,rgba(15,23,42,0.05)_0%,transparent_34%),radial-gradient(circle_at_18%_12%,rgba(20,184,166,0.16),transparent_32%),radial-gradient(circle_at_84%_8%,rgba(245,158,11,0.18),transparent_28%),radial-gradient(circle_at_88%_78%,rgba(14,165,233,0.14),transparent_30%)] dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.74),rgba(15,23,42,0.96)),radial-gradient(circle_at_18%_12%,rgba(20,184,166,0.18),transparent_34%),radial-gradient(circle_at_84%_8%,rgba(245,158,11,0.18),transparent_28%),radial-gradient(circle_at_88%_78%,rgba(14,165,233,0.16),transparent_30%)]" />
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40 dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
 
-      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="MessMate home">
-          <Image
-            src="/icons/messmate-192.png"
-            alt=""
-            width={40}
-            height={40}
-            className="size-10 rounded-2xl shadow-lg shadow-amber-500/20"
-          />
-          <div className="leading-tight">
-            <p className="text-base font-bold tracking-tight">MessMate</p>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Hostel CRM</p>
+      <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-[#f5f7fb]/82 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/82">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="MessMate home">
+            <Image
+              src="/icons/messmate-192.png"
+              alt=""
+              width={40}
+              height={40}
+              className="size-10 rounded-2xl shadow-lg shadow-amber-500/20"
+            />
+            <div className="leading-tight">
+              <p className="text-base font-bold tracking-tight">MessMate</p>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Hostel CRM</p>
+            </div>
+          </Link>
+          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
+            <a href="#features" className="transition hover:text-slate-950 dark:hover:text-white">
+              Features
+            </a>
+            <a href="#workflow" className="transition hover:text-slate-950 dark:hover:text-white">
+              Workflow
+            </a>
+            <a href="#dashboard" className="transition hover:text-slate-950 dark:hover:text-white">
+              Dashboard
+            </a>
+          </nav>
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeSwitcher />
+            <Button asChild size="sm" className="rounded-full px-4">
+              <Link href="/login">
+                Login
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
           </div>
-        </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
-          <a href="#features" className="transition hover:text-slate-950 dark:hover:text-white">
-            Features
-          </a>
-          <a href="#workflow" className="transition hover:text-slate-950 dark:hover:text-white">
-            Workflow
-          </a>
-          <a href="#dashboard" className="transition hover:text-slate-950 dark:hover:text-white">
-            Dashboard
-          </a>
-        </nav>
-        <div className="flex shrink-0 items-center gap-2">
-          <ThemeSwitcher />
-          <Button asChild size="sm" className="rounded-full px-4">
-            <Link href="/login">
-              Login
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
         </div>
       </header>
 
@@ -169,7 +171,7 @@ export default async function Home() {
               asChild
               variant="outline"
               size="lg"
-              className="h-12 rounded-full border-slate-950/10 bg-slate-950 px-6 text-white shadow-sm shadow-slate-900/10 hover:bg-slate-800 dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-50 dark:hover:bg-cyan-300/15"
+              className="h-12 rounded-full border-cyan-200 bg-cyan-50 px-6 text-cyan-950 shadow-sm shadow-cyan-900/5 hover:bg-cyan-100 dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-50 dark:hover:bg-cyan-300/15"
             >
               <a href="#features">Explore Features</a>
             </Button>
@@ -364,7 +366,7 @@ export default async function Home() {
       <section id="workflow" className="border-y border-slate-200/80 bg-white py-14 text-slate-950 dark:border-white/10 dark:bg-slate-950 dark:text-white sm:py-18">
         <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:px-8">
           <div className="space-y-6">
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-950 shadow-sm shadow-cyan-900/5 dark:bg-white dark:text-slate-950">
               <LayoutDashboard className="size-5" />
             </div>
             <div>
@@ -484,7 +486,7 @@ export default async function Home() {
                         className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                       >
                         <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</span>
-                        <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white dark:bg-white dark:text-slate-950">
+                        <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800 ring-1 ring-cyan-100 dark:bg-white dark:text-slate-950 dark:ring-0">
                           {value}
                         </span>
                       </div>
