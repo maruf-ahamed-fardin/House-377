@@ -109,11 +109,12 @@ export default async function Home() {
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="MessMate home">
             <Image
-              src="/icons/messmate-192.png"
+              src="/icons/messmate-mark.png"
               alt=""
-              width={40}
-              height={40}
-              className="size-10 rounded-2xl shadow-lg shadow-amber-500/20"
+              width={80}
+              height={80}
+              priority
+              className="size-10 object-contain drop-shadow-lg md:size-11"
             />
             <div className="leading-tight">
               <p className="text-base font-bold tracking-tight">MessMate</p>
@@ -133,9 +134,9 @@ export default async function Home() {
           </nav>
           <div className="flex shrink-0 items-center gap-2">
             <ThemeSwitcher />
-            <Button asChild size="sm" className="rounded-full px-4">
-              <Link href="/login">
-                Login
+            <Button asChild size="sm" className="size-10 shrink-0 rounded-full p-0 md:h-9 md:w-auto md:px-4">
+              <Link href="/login" aria-label="Login">
+                <span className="hidden md:inline">Login</span>
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -143,18 +144,27 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="mx-auto grid w-full max-w-7xl gap-10 px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
-        <div className="space-y-8">
+      <section className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
+        <div className="min-w-0 space-y-8">
+          <Image
+            src="/icons/messmate-logo.png"
+            alt="MessMate"
+            width={245}
+            height={140}
+            priority
+            className="h-24 w-auto object-contain drop-shadow-xl sm:h-28"
+          />
+
           <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-4 py-2 text-sm font-semibold text-amber-950 shadow-sm shadow-amber-900/5 backdrop-blur dark:border-amber-300/25 dark:bg-amber-300/10 dark:text-amber-50">
             <Sparkles className="size-4 text-amber-600 dark:text-amber-300" />
             Built for modern mess and hostel teams
           </div>
 
           <div className="space-y-5">
-            <h1 className="max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
+            <h1 className="max-w-3xl text-3xl font-semibold leading-[1.08] tracking-tight text-slate-950 md:text-5xl lg:text-6xl dark:text-white">
               Turn mess management into a clean CRM workspace.
             </h1>
-            <p className="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+            <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg md:leading-8 dark:text-slate-300">
               MessMate brings members, meals, rent, deposits, reports, notices, and chat into one polished operating
               system for student hostels.
             </p>
@@ -212,7 +222,7 @@ export default async function Home() {
             <div className="grid min-h-[560px] bg-slate-50/70 dark:bg-slate-950/40 lg:grid-cols-[176px_1fr]">
               <aside className="hidden border-r border-slate-200/80 bg-white p-4 text-slate-700 dark:border-white/10 dark:bg-slate-950 dark:text-white lg:block">
                 <div className="mb-8 flex items-center gap-3">
-                  <Image src="/icons/messmate-192.png" alt="" width={36} height={36} className="size-9 rounded-xl" />
+                  <Image src="/icons/messmate-mark.png" alt="" width={72} height={72} className="size-10 object-contain drop-shadow" />
                   <div>
                     <p className="text-sm font-semibold">MessMate</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">Admin suite</p>

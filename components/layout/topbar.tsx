@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
 
@@ -42,6 +43,13 @@ export function Topbar({ user }: { user: Session["user"] }) {
       <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <MobileSidebar user={user} />
+          <Image
+            src="/icons/messmate-mark.png"
+            alt=""
+            width={72}
+            height={72}
+            className="size-9 shrink-0 object-contain drop-shadow md:hidden"
+          />
           <div className="min-w-0">
             <p className="truncate text-base font-semibold sm:text-lg">{currentPage.title}</p>
             <p className="truncate text-xs text-muted-foreground sm:text-sm">{currentPage.subtitle}</p>

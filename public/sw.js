@@ -1,4 +1,4 @@
-const CACHE_VERSION = "messmate-v2";
+const CACHE_VERSION = "messmate-v3";
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const OFFLINE_URL = "/offline";
@@ -6,6 +6,9 @@ const OFFLINE_URL = "/offline";
 const SHELL_ASSETS = [
   OFFLINE_URL,
   "/manifest.webmanifest",
+  "/favicon.ico",
+  "/icons/messmate-logo.png",
+  "/icons/messmate-mark.png",
   "/icons/messmate-192.png",
   "/icons/messmate-512.png",
   "/icons/messmate-maskable-512.png",

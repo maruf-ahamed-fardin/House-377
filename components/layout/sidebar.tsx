@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
-import { House, ShieldEllipsis } from "lucide-react";
+import { ShieldEllipsis } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,8 +13,14 @@ import { cn } from "@/lib/utils";
 
 function LogoMark() {
   return (
-    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-950/15 dark:bg-white dark:text-slate-950">
-      <House className="size-5" />
+    <div className="flex size-12 shrink-0 items-center justify-center">
+      <Image
+        src="/icons/messmate-mark.png"
+        alt=""
+        width={96}
+        height={96}
+        className="size-12 object-contain drop-shadow-lg"
+      />
     </div>
   );
 }

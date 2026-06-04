@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { LockKeyhole, ShieldCheck, Sparkles, Users } from "lucide-react";
 
@@ -32,17 +33,26 @@ export default async function LoginPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.18),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.16),transparent_35%),linear-gradient(180deg,rgba(15,23,42,0.02),rgba(15,23,42,0.08))] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl gap-8 lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <section className="space-y-8">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 gap-8 lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <section className="min-w-0 space-y-8">
+          <Image
+            src="/icons/messmate-logo.png"
+            alt="MessMate"
+            width={245}
+            height={140}
+            priority
+            className="h-24 w-auto object-contain drop-shadow-xl sm:h-28"
+          />
+
           <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-200">
             <LockKeyhole className="size-4 text-amber-600" />
             Secure mess and hostel operations
           </div>
           <div className="space-y-4">
-            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
+            <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 md:text-5xl lg:text-6xl dark:text-white">
               Sign in to keep MessMate running cleanly every month.
             </h1>
-            <p className="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+            <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg md:leading-8 dark:text-slate-300">
               One place for meals, payments, notices, rent distribution, member management, and group coordination.
             </p>
           </div>
