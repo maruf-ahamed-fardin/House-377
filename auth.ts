@@ -1,8 +1,10 @@
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { compare } from "bcryptjs";
 import { NextResponse } from "next/server";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
@@ -14,6 +16,7 @@ const authSecret =
   (process.env.NODE_ENV === "production" ? undefined : "messmate-dev-secret");
 
 export const authConfig = {
+  adapter: PrismaAdapter(prisma),
   trustHost: true,
   secret: authSecret,
   session: {
@@ -23,6 +26,11 @@ export const authConfig = {
     signIn: "/login",
   },
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       name: "Email and Password",
       credentials: {
@@ -50,6 +58,11 @@ export const authConfig = {
         }
 
         if (user.memberProfile?.status === "INACTIVE") {
+          return null;
+        }
+
+        if (!user.passwordHash) {
+          // OAuth-only user trying to use password sign-in
           return null;
         }
 
@@ -92,14 +105,22 @@ export const authConfig = {
 
       return true;
     },
-    jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.memberProfileId = user.memberProfileId ?? null;
-        token.phone = user.phone ?? null;
-        token.isActive = user.isActive;
-        token.memberStatus = user.memberStatus ?? null;
+        // Look up the full DB user to get role + profile data
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id as string },
+          include: { memberProfile: true },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+          token.memberProfileId = dbUser.memberProfile?.id ?? null;
+          token.phone = dbUser.phone ?? null;
+          token.isActive = dbUser.isActive;
+          token.memberStatus = dbUser.memberProfile?.status ?? null;
+        }
       }
 
       return token;

@@ -45,52 +45,89 @@ enum RequestStatus {
 }
 
 model User {
-  id                      String           @id @default(cuid())
-  email                   String           @unique
-  passwordHash            String
-  role                    Role             @default(MEMBER)
-  name                    String
-  image                   String?
-  phone                   String?
-  isActive                Boolean          @default(true)
-  createdAt               DateTime         @default(now())
-  updatedAt               DateTime         @updatedAt
-  memberProfile           MemberProfile?
-  messages                ChatMessage[]    @relation("ChatSender")
-  timelinePosts           TimelinePost[]   @relation("TimelineAuthor")
-  noticesCreated          Notice[]         @relation("NoticeCreatedBy")
-  mealUpdates             MealRecord[]     @relation("MealUpdatedBy")
-  bazarExpensesCreated    BazarExpense[]   @relation("BazarCreatedBy")
-  bazarSchedulesCreated   BazarSchedule[]  @relation("BazarScheduleCreatedBy")
-  bazarChangeRequests     BazarScheduleChangeRequest[] @relation("BazarScheduleRequestedBy")
+  id                         String                       @id @default(cuid())
+  email                      String                       @unique
+  emailVerified              DateTime?
+  passwordHash               String?
+  role                       Role                         @default(MEMBER)
+  name                       String
+  image                      String?
+  phone                      String?
+  isActive                   Boolean                      @default(true)
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+  memberProfile              MemberProfile?
+  accounts                   Account[]
+  sessions                   Session[]
+  messages                   ChatMessage[]                @relation("ChatSender")
+  timelinePosts              TimelinePost[]               @relation("TimelineAuthor")
+  noticesCreated             Notice[]                     @relation("NoticeCreatedBy")
+  mealUpdates                MealRecord[]                 @relation("MealUpdatedBy")
+  bazarExpensesCreated       BazarExpense[]               @relation("BazarCreatedBy")
+  bazarSchedulesCreated      BazarSchedule[]              @relation("BazarScheduleCreatedBy")
+  bazarChangeRequests        BazarScheduleChangeRequest[] @relation("BazarScheduleRequestedBy")
   bazarChangeRequestsHandled BazarScheduleChangeRequest[] @relation("BazarScheduleHandledBy")
-  rentPaymentsCreated     RentPayment[]    @relation("RentPaymentCreatedBy")
-  otherExpensesCreated    OtherExpense[]   @relation("OtherExpenseCreatedBy")
-  depositsCreated         Deposit[]        @relation("DepositCreatedBy")
-  importantInfoUpdated    ImportantInfo[]  @relation("ImportantInfoUpdatedBy")
-  monthlySummariesUpdated MonthlySummary[] @relation("MonthlySummaryUpdatedBy")
-  auditActions            AuditLog[]       @relation("AuditActor")
+  rentPaymentsCreated        RentPayment[]                @relation("RentPaymentCreatedBy")
+  otherExpensesCreated       OtherExpense[]               @relation("OtherExpenseCreatedBy")
+  depositsCreated            Deposit[]                    @relation("DepositCreatedBy")
+  importantInfoUpdated       ImportantInfo[]              @relation("ImportantInfoUpdatedBy")
+  monthlySummariesUpdated    MonthlySummary[]             @relation("MonthlySummaryUpdatedBy")
+  auditActions               AuditLog[]                   @relation("AuditActor")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model MemberProfile {
-  id               String         @id @default(cuid())
-  userId           String         @unique
+  id               String          @id @default(cuid())
+  userId           String          @unique
   permanentAddress String
   roomNumber       String
   joiningDate      DateTime
-  status           MemberStatus   @default(ACTIVE)
+  status           MemberStatus    @default(ACTIVE)
   guardianPhone    String?
-  monthlyRentShare Decimal        @default(0)
+  monthlyRentShare Decimal         @default(0)
   notes            String?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   meals            MealRecord[]
-  bazarExpenses    BazarExpense[] @relation("BazarBuyer")
+  bazarExpenses    BazarExpense[]  @relation("BazarBuyer")
   bazarSchedules   BazarSchedule[] @relation("BazarScheduleMember")
-  rentPayments     RentPayment[]  @relation("RentPayer")
-  otherExpenses    OtherExpense[] @relation("OtherExpensePaidBy")
-  deposits         Deposit[]      @relation("DepositMember")
+  rentPayments     RentPayment[]   @relation("RentPayer")
+  otherExpenses    OtherExpense[]  @relation("OtherExpensePaidBy")
+  deposits         Deposit[]       @relation("DepositMember")
 }
 
 model MealRecord {
@@ -203,20 +240,20 @@ model Notice {
 }
 
 model ImportantInfo {
-  id                   String   @id @default(cuid())
-  electricityAccount   String?
-  gasCardNumber        String?
-  wifiInfo             String?
-  houseOwnerPhone      String?
-  emergencyContacts    Json?
-  nearbyDoctorInfo     String?
-  nearbyPharmacyInfo   String?
-  otherNotes           String?
-  membersCanView       Boolean  @default(true)
-  updatedById          String
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  updatedBy            User     @relation("ImportantInfoUpdatedBy", fields: [updatedById], references: [id])
+  id                 String   @id @default(cuid())
+  electricityAccount String?
+  gasCardNumber      String?
+  wifiInfo           String?
+  houseOwnerPhone    String?
+  emergencyContacts  Json?
+  nearbyDoctorInfo   String?
+  nearbyPharmacyInfo String?
+  otherNotes         String?
+  membersCanView     Boolean  @default(true)
+  updatedById        String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  updatedBy          User     @relation("ImportantInfoUpdatedBy", fields: [updatedById], references: [id])
 }
 
 model ChatMessage {
@@ -231,16 +268,16 @@ model ChatMessage {
 }
 
 model BazarSchedule {
-  id          String   @id @default(cuid())
-  memberId    String
-  date        DateTime @unique
-  monthKey    String
-  notes       String?
-  createdById String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  member      MemberProfile @relation("BazarScheduleMember", fields: [memberId], references: [id], onDelete: Cascade)
-  createdBy   User     @relation("BazarScheduleCreatedBy", fields: [createdById], references: [id])
+  id             String                       @id @default(cuid())
+  memberId       String
+  date           DateTime                     @unique
+  monthKey       String
+  notes          String?
+  createdById    String
+  createdAt      DateTime                     @default(now())
+  updatedAt      DateTime                     @updatedAt
+  member         MemberProfile                @relation("BazarScheduleMember", fields: [memberId], references: [id], onDelete: Cascade)
+  createdBy      User                         @relation("BazarScheduleCreatedBy", fields: [createdById], references: [id])
   changeRequests BazarScheduleChangeRequest[]
 
   @@index([monthKey])
@@ -248,20 +285,20 @@ model BazarSchedule {
 }
 
 model BazarScheduleChangeRequest {
-  id               String        @id @default(cuid())
-  scheduleId       String
-  requesterId      String
-  requestedDate    DateTime
+  id                String        @id @default(cuid())
+  scheduleId        String
+  requesterId       String
+  requestedDate     DateTime
   requestedMonthKey String
-  reason           String
-  status           RequestStatus @default(PENDING)
-  adminNote        String?
-  handledById      String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  schedule         BazarSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  requester        User          @relation("BazarScheduleRequestedBy", fields: [requesterId], references: [id], onDelete: Cascade)
-  handledBy        User?         @relation("BazarScheduleHandledBy", fields: [handledById], references: [id], onDelete: SetNull)
+  reason            String
+  status            RequestStatus @default(PENDING)
+  adminNote         String?
+  handledById       String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  schedule          BazarSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  requester         User          @relation("BazarScheduleRequestedBy", fields: [requesterId], references: [id], onDelete: Cascade)
+  handledBy         User?         @relation("BazarScheduleHandledBy", fields: [handledById], references: [id], onDelete: SetNull)
 
   @@index([scheduleId])
   @@index([requesterId])

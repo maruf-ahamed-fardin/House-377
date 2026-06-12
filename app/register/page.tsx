@@ -3,8 +3,13 @@ import { redirect } from "next/navigation";
 import { LockKeyhole, ShieldCheck, Sparkles, Users } from "lucide-react";
 
 import { auth } from "@/auth";
-import { LoginForm } from "@/components/forms/login-form";
+import { RegisterForm } from "@/components/forms/register-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const metadata = {
+  title: "Create Account – MessMate",
+  description: "Sign up for MessMate to track meals, payments, and manage your mess operations effortlessly.",
+};
 
 const highlights = [
   {
@@ -24,7 +29,7 @@ const highlights = [
   },
 ];
 
-export default async function LoginPage() {
+export default async function RegisterPage() {
   const session = await auth();
 
   if (session?.user) {
@@ -50,7 +55,7 @@ export default async function LoginPage() {
           </div>
           <div className="space-y-4">
             <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 md:text-5xl lg:text-6xl dark:text-white">
-              Sign in to keep MessMate running cleanly every month.
+              Join MessMate and take control of your mess.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg md:leading-8 dark:text-slate-300">
               One place for meals, payments, notices, rent distribution, member management, and group coordination.
@@ -81,20 +86,13 @@ export default async function LoginPage() {
 
         <Card className="border-white/70 bg-white/80 shadow-2xl shadow-slate-900/10 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
           <CardHeader className="space-y-3">
-            <CardTitle className="text-3xl">Welcome back</CardTitle>
+            <CardTitle className="text-3xl">Create your account</CardTitle>
             <CardDescription>
-              Sign in with Google or your email to open the dashboard. New here?{" "}
-              <a
-                href="/register"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
-              >
-                Create an account
-              </a>
-              .
+              Sign up with Google for the fastest experience, or create an account with your email and password.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <LoginForm />
+            <RegisterForm />
           </CardContent>
         </Card>
       </div>

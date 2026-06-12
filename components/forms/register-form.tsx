@@ -5,29 +5,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema, type LoginValues } from "@/lib/validations/auth";
+import { registerAction } from "@/lib/actions/auth";
+import { registerSchema, type RegisterValues } from "@/lib/validations/register";
 
-export function LoginForm() {
-  const router = useRouter();
+export function RegisterForm() {
   const [isPending, startTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
 
-  const form = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  function handleGoogleSignIn() {
+  function handleGoogleSignUp() {
     startGoogleTransition(async () => {
       await signIn("google", { callbackUrl: "/dashboard" });
     });
@@ -35,13 +36,13 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
-      {/* Google Sign-In */}
+      {/* Google Sign-Up */}
       <Button
-        id="google-signin-btn"
+        id="google-signup-btn"
         type="button"
         variant="outline"
         className="w-full gap-3 border-border/60 bg-background/60 font-medium hover:bg-accent/60"
-        onClick={handleGoogleSignIn}
+        onClick={handleGoogleSignUp}
         disabled={isGooglePending || isPending}
       >
         {isGooglePending ? (
@@ -69,46 +70,68 @@ export function LoginForm() {
         {isGooglePending ? "Connecting..." : "Continue with Google"}
       </Button>
 
-      {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/50" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background/0 px-3 text-muted-foreground backdrop-blur-sm">
-            or sign in with email
+            or create with email
           </span>
         </div>
       </div>
 
-      {/* Email / Password form */}
+      {/* Email Registration Form */}
       <form
-        id="login-form"
+        id="register-form"
         className="space-y-5"
         onSubmit={form.handleSubmit((values) => {
           startTransition(async () => {
+            const result = await registerAction(values);
+
+            if (!result.success) {
+              toast.error(result.message);
+              return;
+            }
+
+            toast.success("Account created! Signing you in…");
+
+            // Auto sign-in after registration
             const response = await signIn("credentials", {
-              ...values,
+              email: values.email,
+              password: values.password,
               redirect: false,
             });
 
             if (response?.error) {
-              toast.error("Invalid email or password.");
+              toast.error("Account created but sign-in failed. Please go to login.");
               return;
             }
 
-            toast.success("Welcome back to MessMate.");
-            router.push("/dashboard");
-            router.refresh();
+            window.location.href = "/dashboard";
           });
         })}
       >
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="reg-name">Full name</Label>
           <Input
-            id="email"
+            id="reg-name"
+            type="text"
+            placeholder="Your full name"
+            autoComplete="name"
+            {...form.register("name")}
+          />
+          {form.formState.errors.name ? (
+            <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
+          ) : null}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="reg-email">Email</Label>
+          <Input
+            id="reg-email"
             type="email"
-            placeholder="admin@messmate.app"
+            placeholder="you@example.com"
             autoComplete="email"
             {...form.register("email")}
           />
@@ -118,12 +141,12 @@ export function LoginForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="reg-password">Password</Label>
           <Input
-            id="password"
+            id="reg-password"
             type="password"
-            placeholder="Enter your password"
-            autoComplete="current-password"
+            placeholder="At least 6 characters"
+            autoComplete="new-password"
             {...form.register("password")}
           />
           {form.formState.errors.password ? (
@@ -131,35 +154,43 @@ export function LoginForm() {
           ) : null}
         </div>
 
-        <Button
-          type="submit"
-          id="login-submit-btn"
-          className="w-full"
-          disabled={isPending || isGooglePending}
-        >
+        <div className="space-y-2">
+          <Label htmlFor="reg-confirm-password">Confirm password</Label>
+          <Input
+            id="reg-confirm-password"
+            type="password"
+            placeholder="Re-enter your password"
+            autoComplete="new-password"
+            {...form.register("confirmPassword")}
+          />
+          {form.formState.errors.confirmPassword ? (
+            <p className="text-xs text-destructive">{form.formState.errors.confirmPassword.message}</p>
+          ) : null}
+        </div>
+
+        <Button type="submit" id="register-submit-btn" className="w-full" disabled={isPending || isGooglePending}>
           {isPending ? (
             <>
               <Loader2 className="size-4 animate-spin" />
-              Signing in…
+              Creating account…
             </>
           ) : (
             <>
-              Sign in
+              Create account
               <ArrowRight className="size-4" />
             </>
           )}
         </Button>
       </form>
 
-      {/* Create account link */}
       <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
+        Already have an account?{" "}
         <Link
-          href="/register"
-          id="go-to-register-link"
+          href="/login"
+          id="go-to-login-link"
           className="font-medium text-foreground underline-offset-4 hover:underline"
         >
-          Create one
+          Sign in
         </Link>
       </p>
     </div>
