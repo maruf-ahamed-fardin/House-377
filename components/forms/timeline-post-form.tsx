@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveTimelinePostAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { timelinePostFormSchema, type TimelinePostFormInput, type TimelinePostFormValues } from "@/lib/validations/community";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +43,7 @@ export function TimelinePostForm({
           className="grid gap-4"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveTimelinePostAction(values);
+              const result = await communityApi.saveTimelinePost(values);
 
               if (!result.success) {
                 toast.error(result.message);

@@ -1,318 +1,117 @@
-import type { Prisma } from "@prisma/client";
-
-import { computeMonthlyReport } from "@/lib/calculations";
+// Server-side data fetching shim — proxies queries to the Express API
+// Pages can keep calling these functions unchanged; internally they fetch from the API server.
+import { cookies } from "next/headers";
 import { getMonthKey } from "@/lib/month";
-import { prisma } from "@/lib/prisma";
 
-const memberInclude = {
-  user: true,
-} satisfies Prisma.MemberProfileInclude;
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 
-export async function getMemberOptions(includeInactive = false) {
-  const members = await prisma.memberProfile.findMany({
-    where: includeInactive ? undefined : { status: "ACTIVE" },
-    include: memberInclude,
+async function apiFetch<T = unknown>(path: string, params?: Record<string, string | undefined>): Promise<T> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  let url = `${API_URL}${path}`;
+  if (params) {
+    const sp = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => { if (v) sp.set(k, v); });
+    const qs = sp.toString();
+    if (qs) url += `?${qs}`;
+  }
+
+  const res = await fetch(url, {
+    headers: { Cookie: `token=${token}` },
+    cache: "no-store",
   });
 
-  return members
-    .sort((a, b) => a.user.name.localeCompare(b.user.name))
-    .map((member) => ({
-      value: member.id,
-      label: `${member.user.name} (${member.roomNumber})`,
-      status: member.status,
-      userId: member.userId,
-    }));
+  if (!res.ok) {
+    throw new Error(`API error ${res.status}: ${path}`);
+  }
+
+  const json = await res.json();
+  return json.data ?? json;
 }
 
-export async function getMonthlyReportData(monthKey = getMonthKey()) {
-  const [members, mealRecords, bazarExpenses, otherExpenses, deposits, rentPayments, summary] = await Promise.all([
-    prisma.memberProfile.findMany({ include: memberInclude }),
-    prisma.mealRecord.findMany({ where: { monthKey } }),
-    prisma.bazarExpense.findMany({ where: { monthKey } }),
-    prisma.otherExpense.findMany({ where: { monthKey } }),
-    prisma.deposit.findMany({ where: { monthKey } }),
-    prisma.rentPayment.findMany({ where: { monthKey } }),
-    prisma.monthlySummary.findUnique({ where: { monthKey } }),
-  ]);
+// --- Dashboard ---
 
-  const report = computeMonthlyReport({
-    members,
-    mealRecords,
-    bazarExpenses,
-    otherExpenses,
-    deposits,
-    rentPayments,
-    summary,
-  });
-
-  return {
-    monthKey,
-    ...report,
-  };
+export async function getAdminDashboardData(monthKey?: string) {
+  return apiFetch("/dashboard/admin", { month: monthKey });
 }
 
-export async function getAdminDashboardData(monthKey = getMonthKey()) {
-  const [report, members, recentNotices, recentActivity] = await Promise.all([
-    getMonthlyReportData(monthKey),
-    prisma.memberProfile.findMany({ include: memberInclude }),
-    prisma.notice.findMany({
-      where: { isPublished: true },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-      take: 5,
-      include: { createdBy: true },
-    }),
-    prisma.auditLog.findMany({
-      orderBy: { timestamp: "desc" },
-      take: 8,
-      include: { performedBy: true },
-    }),
-  ]);
-
-  return {
-    report,
-    recentNotices,
-    recentActivity,
-    totalMembers: members.length,
-    activeMembers: members.filter((member) => member.status === "ACTIVE").length,
-  };
+export async function getMemberDashboardData(_userId: string, monthKey?: string) {
+  return apiFetch("/dashboard/member", { month: monthKey });
 }
 
-export async function getMemberDashboardData(userId: string, monthKey = getMonthKey()) {
-  const [report, profile, recentNotices, recentMeals, importantInfo, recentPayments, recentDeposits] = await Promise.all([
-    getMonthlyReportData(monthKey),
-    prisma.memberProfile.findUnique({
-      where: { userId },
-      include: memberInclude,
-    }),
-    prisma.notice.findMany({
-      where: { isPublished: true },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-      take: 5,
-      include: { createdBy: true },
-    }),
-    prisma.mealRecord.findMany({
-      where: { monthKey, member: { userId } },
-      orderBy: { date: "desc" },
-      take: 8,
-    }),
-    prisma.importantInfo.findFirst({
-      orderBy: { updatedAt: "desc" },
-    }),
-    prisma.rentPayment.findMany({
-      where: { monthKey, member: { userId } },
-      orderBy: { date: "desc" },
-      take: 5,
-    }),
-    prisma.deposit.findMany({
-      where: { monthKey, member: { userId } },
-      orderBy: { date: "desc" },
-      take: 5,
-    }),
-  ]);
-
-  const memberRow = report.memberRows.find((row) => row.userId === userId) ?? null;
-
-  return {
-    report,
-    profile,
-    memberRow,
-    recentNotices,
-    recentMeals,
-    importantInfo: importantInfo?.membersCanView ? importantInfo : null,
-    recentPayments,
-    recentDeposits,
-  };
+export async function getProfilePageData(_userId: string, monthKey?: string) {
+  return apiFetch("/dashboard/profile", { month: monthKey });
 }
+
+export async function getHistoryPageData(_userId?: string, _role?: string) {
+  return apiFetch("/dashboard/history");
+}
+
+export async function getMonthlyReportData(monthKey?: string) {
+  return apiFetch("/dashboard/report", { month: monthKey });
+}
+
+// --- Meals ---
+
+export async function getMealsPageData(monthKey?: string) {
+  return apiFetch("/meals", { month: monthKey ?? getMonthKey() });
+}
+
+// --- Bazar ---
+
+export async function getBazarPageData(monthKey?: string) {
+  return apiFetch("/bazar", { month: monthKey ?? getMonthKey() });
+}
+
+// --- Rent ---
+
+export async function getRentPageData(monthKey?: string) {
+  return apiFetch("/rent", { month: monthKey ?? getMonthKey() });
+}
+
+// --- Expenses ---
+
+export async function getOtherExpensesPageData(monthKey?: string) {
+  return apiFetch("/expenses", { month: monthKey ?? getMonthKey() });
+}
+
+// --- Deposits ---
+
+export async function getDepositsPageData(monthKey?: string) {
+  return apiFetch("/deposits", { month: monthKey ?? getMonthKey() });
+}
+
+// --- Members ---
 
 export async function getMembersPageData() {
-  const members = await prisma.memberProfile.findMany({
-    include: memberInclude,
-  });
-
-  return members.sort((a, b) => a.user.name.localeCompare(b.user.name));
+  return apiFetch("/members");
 }
 
-export async function getMealsPageData(monthKey = getMonthKey()) {
-  const [records, options, report] = await Promise.all([
-    prisma.mealRecord.findMany({
-      where: { monthKey },
-      include: {
-        member: {
-          include: memberInclude,
-        },
-        updatedBy: true,
-      },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-    getMonthlyReportData(monthKey),
-  ]);
-
-  return { records, options, report };
-}
-
-export async function getBazarPageData(monthKey = getMonthKey()) {
-  const [records, options, report] = await Promise.all([
-    prisma.bazarExpense.findMany({
-      where: { monthKey },
-      include: {
-        boughtBy: {
-          include: memberInclude,
-        },
-        createdBy: true,
-      },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-    getMonthlyReportData(monthKey),
-  ]);
-
-  return { records, options, report };
-}
-
-export async function getRentPageData(monthKey = getMonthKey()) {
-  const [payments, options, report] = await Promise.all([
-    prisma.rentPayment.findMany({
-      where: { monthKey },
-      include: {
-        member: {
-          include: memberInclude,
-        },
-        createdBy: true,
-      },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-    getMonthlyReportData(monthKey),
-  ]);
-
-  return { payments, options, report };
-}
-
-export async function getOtherExpensesPageData(monthKey = getMonthKey()) {
-  const [records, options, report] = await Promise.all([
-    prisma.otherExpense.findMany({
-      where: { monthKey },
-      include: {
-        paidBy: {
-          include: memberInclude,
-        },
-        createdBy: true,
-      },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-    getMonthlyReportData(monthKey),
-  ]);
-
-  return { records, options, report };
-}
-
-export async function getDepositsPageData(monthKey = getMonthKey()) {
-  const [records, options, report] = await Promise.all([
-    prisma.deposit.findMany({
-      where: { monthKey },
-      include: {
-        member: {
-          include: memberInclude,
-        },
-        createdBy: true,
-      },
-      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-    getMonthlyReportData(monthKey),
-  ]);
-
-  return { records, options, report };
-}
+// --- Notices ---
 
 export async function getNoticesPageData() {
-  return prisma.notice.findMany({
-    include: { createdBy: true },
-    orderBy: [{ date: "desc" }, { createdAt: "desc" }],
-  });
+  return apiFetch("/notices");
 }
+
+// --- Important Info ---
 
 export async function getImportantInfoRecord() {
-  return prisma.importantInfo.findFirst({
-    orderBy: { updatedAt: "desc" },
-    include: { updatedBy: true },
-  });
+  return apiFetch("/important-info");
 }
 
-export async function getChatMessages(limit = 60) {
-  const messages = await prisma.chatMessage.findMany({
-    orderBy: { createdAt: "asc" },
-    take: limit,
-    include: {
-      sender: true,
-    },
-  });
+// --- Chat ---
 
-  return messages;
+export async function getChatMessages() {
+  return apiFetch("/chat");
 }
 
-export async function getBazarSchedulePageData(userId: string, role: "ADMIN" | "MEMBER", monthKey = getMonthKey()) {
-  const [schedules, requests, options] = await Promise.all([
-    prisma.bazarSchedule.findMany({
-      where: { monthKey },
-      include: {
-        member: {
-          include: memberInclude,
-        },
-        createdBy: true,
-      },
-      orderBy: [{ date: "asc" }, { createdAt: "asc" }],
-    }),
-    prisma.bazarScheduleChangeRequest.findMany({
-      where:
-        role === "ADMIN"
-          ? {
-              OR: [{ schedule: { monthKey } }, { requestedMonthKey: monthKey }],
-            }
-          : {
-              requesterId: userId,
-            },
-      include: {
-        requester: true,
-        handledBy: true,
-        schedule: {
-          include: {
-            member: {
-              include: memberInclude,
-            },
-          },
-        },
-      },
-      orderBy: [{ createdAt: "desc" }],
-    }),
-    getMemberOptions(true),
-  ]);
+// --- Community ---
 
-  return { schedules, requests, options, monthKey };
+export async function getBazarSchedulePageData(monthKey?: string) {
+  return apiFetch("/community/bazar-schedule", { month: monthKey ?? getMonthKey() });
 }
 
 export async function getTimelinePageData() {
-  return prisma.timelinePost.findMany({
-    include: {
-      author: true,
-    },
-    orderBy: [{ isResolved: "asc" }, { createdAt: "desc" }],
-  });
-}
-
-export async function getHistoryPageData(userId: string, role: "ADMIN" | "MEMBER") {
-  return prisma.auditLog.findMany({
-    where: role === "ADMIN" ? undefined : { performedById: userId },
-    orderBy: { timestamp: "desc" },
-    take: 120,
-    include: {
-      performedBy: true,
-    },
-  });
-}
-
-export async function getProfilePageData(userId: string, monthKey = getMonthKey()) {
-  return getMemberDashboardData(userId, monthKey);
+  return apiFetch("/community/timeline");
 }

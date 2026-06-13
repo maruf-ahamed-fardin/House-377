@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveRentPaymentAction } from "@/lib/actions/rent";
+import { rentApi } from "@/lib/api-client";
 import { rentPaymentFormSchema, type RentPaymentFormInput, type RentPaymentFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +48,7 @@ export function RentPaymentForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveRentPaymentAction(values);
+              const result = await rentApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

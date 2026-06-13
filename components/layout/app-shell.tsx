@@ -1,6 +1,6 @@
 "use client";
 
-import type { Session } from "next-auth";
+import type { AuthUser } from "../../shared/types";
 
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
@@ -9,7 +9,7 @@ export function AppShell({
   user,
   children,
 }: {
-  user: Session["user"];
+  user: AuthUser;
   children: React.ReactNode;
 }) {
   return (

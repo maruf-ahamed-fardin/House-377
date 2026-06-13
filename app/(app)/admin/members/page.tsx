@@ -8,10 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteMemberAction } from "@/lib/actions/members";
+import { membersApi } from "@/lib/api-client";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { getMembersPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 export default async function MembersPage({
@@ -105,7 +105,7 @@ export default async function MembersPage({
                             label="Deactivate"
                             message="This will deactivate the member account and keep their historical records. Continue?"
                             variant="ghost"
-                            action={deleteMemberAction.bind(null, member.id)}
+                            action={membersApi.delete.bind(null, member.id)}
                           />
                         </div>
                       </TableCell>

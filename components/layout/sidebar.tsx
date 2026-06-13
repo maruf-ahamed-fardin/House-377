@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Session } from "next-auth";
 import { LogOut, ShieldEllipsis, User } from "lucide-react";
-import { signOut } from "next-auth/react";
 
+import type { AuthUser } from "../../shared/types";
+import { useAuth } from "@/lib/auth-context";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { navigationItems } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -28,12 +28,13 @@ function LogoMark() {
 }
 
 interface SidebarContentProps {
-  user: Session["user"];
+  user: AuthUser;
   onNavigate?: () => void;
 }
 
 export function SidebarContent({ user, onNavigate }: SidebarContentProps) {
   const pathname = usePathname();
+  const { logout } = useAuth();
   const items = navigationItems.filter((item) => item.roles.includes(user.role));
   const isAdmin = user.role === "ADMIN";
 
@@ -147,7 +148,7 @@ export function SidebarContent({ user, onNavigate }: SidebarContentProps) {
       {/* Sign out button */}
       <div className="mt-3 border-t border-border/40 pt-3">
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => logout()}
           className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-150 hover:bg-destructive/10 hover:text-destructive dark:text-slate-400"
         >
           <span className="flex size-7 shrink-0 items-center justify-center rounded-lg transition-transform duration-150 group-hover:scale-110">
@@ -160,7 +161,7 @@ export function SidebarContent({ user, onNavigate }: SidebarContentProps) {
   );
 }
 
-export function Sidebar({ user }: { user: Session["user"] }) {
+export function Sidebar({ user }: { user: AuthUser }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col md:flex xl:w-72">
       <div className="sticky top-6 flex h-[calc(100vh-3rem)] flex-col overflow-hidden rounded-2xl border border-white/70 bg-white/80 p-4 shadow-2xl shadow-slate-900/8 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">

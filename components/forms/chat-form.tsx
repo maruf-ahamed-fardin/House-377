@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { sendChatMessageAction } from "@/lib/actions/chat";
+import { chatApi } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { chatMessageSchema, type ChatMessageValues } from "@/lib/validations/chat";
@@ -27,7 +27,7 @@ export function ChatForm() {
       className="space-y-3"
       onSubmit={form.handleSubmit((values) => {
         startTransition(async () => {
-          const result = await sendChatMessageAction(values);
+          const result = await chatApi.send(values);
 
           if (!result.success) {
             toast.error(result.message);

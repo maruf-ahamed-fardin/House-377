@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveMealRecordAction } from "@/lib/actions/meals";
+import { mealsApi } from "@/lib/api-client";
 import { mealFormSchema, type MealFormInput, type MealFormValues } from "@/lib/validations/meal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,7 +50,7 @@ export function MealForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveMealRecordAction(values);
+              const result = await mealsApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

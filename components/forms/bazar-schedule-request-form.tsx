@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { submitBazarScheduleChangeRequestAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import {
   bazarScheduleRequestFormSchema,
   type BazarScheduleRequestFormInput,
@@ -49,7 +49,7 @@ export function BazarScheduleRequestForm({
           className="grid gap-4"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await submitBazarScheduleChangeRequestAction(values);
+              const result = await communityApi.submitChangeRequest(values);
 
               if (!result.success) {
                 toast.error(result.message);

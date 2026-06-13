@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveMemberAction } from "@/lib/actions/members";
+import { membersApi } from "@/lib/api-client";
 import { type MemberFormInput, type MemberFormValues, memberFormSchema } from "@/lib/validations/member";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,7 +57,7 @@ export function MemberForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveMemberAction(values);
+              const result = await membersApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

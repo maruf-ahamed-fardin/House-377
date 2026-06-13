@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { LogOut, UserCircle2 } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { type Session } from "next-auth";
 
+import type { AuthUser } from "../../shared/types";
+import { useAuth } from "@/lib/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -24,7 +24,9 @@ function getInitials(name?: string | null) {
     .toUpperCase();
 }
 
-export function UserNav({ user }: { user: Session["user"] }) {
+export function UserNav({ user }: { user: AuthUser }) {
+  const { logout } = useAuth();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -54,7 +56,7 @@ export function UserNav({ user }: { user: Session["user"] }) {
         <DropdownMenuItem
           onSelect={(event) => {
             event.preventDefault();
-            void signOut({ callbackUrl: "/login" });
+            void logout();
           }}
         >
           <LogOut className="mr-2 size-4" />

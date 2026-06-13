@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteBazarExpenseAction } from "@/lib/actions/bazar";
+import { bazarApi } from "@/lib/api-client";
 import { formatCurrency, formatDate, formatNumber } from "@/lib/format";
 import { formatMonthLabel, getMonthKey } from "@/lib/month";
-import { getBazarPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 const filterSelectClassName =
@@ -138,7 +138,7 @@ export default async function BazarPage({
                               Edit
                             </Link>
                           </Button>
-                          <DeleteButton label="Delete" message="Delete this bazar record?" variant="ghost" action={deleteBazarExpenseAction.bind(null, record.id)} />
+                          <DeleteButton label="Delete" message="Delete this bazar record?" variant="ghost" action={bazarApi.delete.bind(null, record.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

@@ -1,21 +1,21 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
 import { FirebaseAnalytics } from "@/components/firebase-analytics";
 import { PwaRegister } from "@/components/pwa-register";
+import { AuthProvider } from "@/lib/auth-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider>
+    <AuthProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         {children}
         <PwaRegister />
         <FirebaseAnalytics />
         <Toaster richColors position="top-right" />
       </ThemeProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }

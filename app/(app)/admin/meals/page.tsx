@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteMealRecordAction } from "@/lib/actions/meals";
+import { mealsApi } from "@/lib/api-client";
 import { formatCurrency, formatDate, formatNumber } from "@/lib/format";
 import { formatMonthLabel, getMonthKey } from "@/lib/month";
-import { getMealsPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 export default async function MealsPage({
@@ -110,7 +110,7 @@ export default async function MealsPage({
                                 Edit
                               </Link>
                             </Button>
-                            <DeleteButton label="Delete" message="Delete this meal record?" variant="ghost" action={deleteMealRecordAction.bind(null, record.id)} />
+                            <DeleteButton label="Delete" message="Delete this meal record?" variant="ghost" action={mealsApi.delete.bind(null, record.id)} />
                           </div>
                         </TableCell>
                       </TableRow>

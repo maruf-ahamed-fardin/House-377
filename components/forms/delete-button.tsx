@@ -4,7 +4,8 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import type { ActionResult } from "@/lib/actions/helpers";
+
+type ActionResult = { success: boolean; message: string };
 
 export function DeleteButton({
   label = "Delete",

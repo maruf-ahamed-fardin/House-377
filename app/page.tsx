@@ -21,9 +21,7 @@ import {
   UsersRound,
   WalletCards,
 } from "lucide-react";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { ThemeSwitcher } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 
@@ -93,12 +91,7 @@ const teamViews = [
   { title: "Audit trail", value: "Synced", icon: BadgeCheck, tone: "text-amber-700 dark:text-amber-200" },
 ];
 
-export default async function Home() {
-  const session = await auth();
-
-  if (session?.user) {
-    redirect("/dashboard");
-  }
+export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-[#f5f7fb] text-slate-950 dark:bg-slate-950 dark:text-white">

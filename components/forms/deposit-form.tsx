@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveDepositAction } from "@/lib/actions/deposits";
+import { depositsApi } from "@/lib/api-client";
 import { depositFormSchema, type DepositFormInput, type DepositFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +49,7 @@ export function DepositForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveDepositAction(values);
+              const result = await depositsApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

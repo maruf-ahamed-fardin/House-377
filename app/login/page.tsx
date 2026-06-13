@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import { LockKeyhole, ShieldCheck, Sparkles, Users } from "lucide-react";
 
-import { auth } from "@/auth";
 import { LoginForm } from "@/components/forms/login-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -24,13 +22,7 @@ const highlights = [
   },
 ];
 
-export default async function LoginPage() {
-  const session = await auth();
-
-  if (session?.user) {
-    redirect("/dashboard");
-  }
-
+export default function LoginPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.18),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.16),transparent_35%),linear-gradient(180deg,rgba(15,23,42,0.02),rgba(15,23,42,0.08))] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 gap-8 lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
@@ -83,7 +75,7 @@ export default async function LoginPage() {
           <CardHeader className="space-y-3">
             <CardTitle className="text-3xl">Welcome back</CardTitle>
             <CardDescription>
-              Sign in with Google or your email to open the dashboard. New here?{" "}
+              Sign in with your email to open the dashboard. New here?{" "}
               <a
                 href="/register"
                 className="font-medium text-foreground underline-offset-4 hover:underline"

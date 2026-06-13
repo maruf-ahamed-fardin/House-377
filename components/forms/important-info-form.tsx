@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveImportantInfoAction } from "@/lib/actions/important-info";
+import { infoApi } from "@/lib/api-client";
 import { importantInfoFormSchema, type ImportantInfoFormInput, type ImportantInfoFormValues } from "@/lib/validations/important-info";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,7 +51,7 @@ export function ImportantInfoForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveImportantInfoAction(values);
+              const result = await infoApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

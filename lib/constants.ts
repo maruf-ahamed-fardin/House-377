@@ -1,4 +1,4 @@
-import type { Role } from "@prisma/client";
+import type { Role } from "../shared/constants";
 import {
   BanknoteArrowUp,
   Bell,
@@ -17,6 +17,9 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
+
+// Re-export shared constants for backwards compatibility
+export { expenseCategoryLabels, noticePriorityClasses } from "../shared/constants";
 
 export type NavItem = {
   href: string;
@@ -44,19 +47,3 @@ export const navigationItems: NavItem[] = [
   { href: "/profile", label: "Profile", icon: BookOpen, roles: ["ADMIN", "MEMBER"] },
   { href: "/history", label: "History", icon: Settings2, roles: ["ADMIN", "MEMBER"] },
 ];
-
-export const noticePriorityClasses = {
-  NORMAL: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-200",
-  IMPORTANT: "bg-amber-100 text-amber-900 dark:bg-amber-500/15 dark:text-amber-200",
-  URGENT: "bg-rose-100 text-rose-900 dark:bg-rose-500/15 dark:text-rose-200",
-} as const;
-
-export const expenseCategoryLabels = {
-  ELECTRICITY: "Electricity",
-  GAS: "Gas",
-  INTERNET: "Internet",
-  CLEANING: "Cleaning",
-  MAINTENANCE: "Maintenance",
-  WATER: "Water",
-  OTHER: "Other",
-} as const;

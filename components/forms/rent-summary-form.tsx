@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveMonthlySummaryAction } from "@/lib/actions/rent";
+import { rentApi } from "@/lib/api-client";
 import { rentSummaryFormSchema, type RentSummaryFormInput, type RentSummaryFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,7 +40,7 @@ export function RentSummaryForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveMonthlySummaryAction(values);
+              const result = await rentApi.saveSummary(values);
 
               if (!result.success) {
                 toast.error(result.message);

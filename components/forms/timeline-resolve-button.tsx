@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { toggleTimelinePostResolvedAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 
 export function TimelineResolveButton({
@@ -25,7 +25,7 @@ export function TimelineResolveButton({
       disabled={isPending}
       onClick={() => {
         startTransition(async () => {
-          const result = await toggleTimelinePostResolvedAction(postId);
+          const result = await communityApi.toggleResolved(postId);
 
           if (!result.success) {
             toast.error(result.message);

@@ -1,31 +1,34 @@
+// Server-side auth helpers — thin shim that validates JWT via the Express API
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 
 export async function requireUser() {
-  const session = await auth();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
 
-  if (!session?.user) {
+  if (!token) {
     redirect("/login");
   }
 
-  return session.user;
+  const res = await fetch(`${API_URL}/auth/me`, {
+    headers: { Cookie: `token=${token}` },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    redirect("/login");
+  }
+
+  const json = await res.json();
+  return json.data?.user ?? json.user;
 }
 
 export async function requireAdmin() {
   const user = await requireUser();
 
   if (user.role !== "ADMIN") {
-    redirect("/dashboard");
-  }
-
-  return user;
-}
-
-export async function requireSelfOrAdmin(userId: string) {
-  const user = await requireUser();
-
-  if (user.role !== "ADMIN" && user.id !== userId) {
     redirect("/dashboard");
   }
 

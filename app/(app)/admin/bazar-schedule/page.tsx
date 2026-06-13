@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteBazarScheduleAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { formatMonthLabel, getMonthKey } from "@/lib/month";
-import { getBazarSchedulePageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, getSingleSearchParam } from "@/lib/utils";
 
 export default async function AdminBazarSchedulePage({
@@ -98,7 +98,7 @@ export default async function AdminBazarSchedulePage({
                                 Edit
                               </Link>
                             </Button>
-                            <DeleteButton label="Delete" message="Delete this bazar schedule?" variant="ghost" action={deleteBazarScheduleAction.bind(null, schedule.id)} />
+                            <DeleteButton label="Delete" message="Delete this bazar schedule?" variant="ghost" action={communityApi.deleteBazarSchedule.bind(null, schedule.id)} />
                           </div>
                         </TableCell>
                       </TableRow>

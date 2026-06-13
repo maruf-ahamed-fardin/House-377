@@ -38,6 +38,10 @@ yarn-error.log*
 # local Prisma database
 prisma/dev.db*
 
+# server
+server/dist/
+server/node_modules/
+
 # vercel
 .vercel
 

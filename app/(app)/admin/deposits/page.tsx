@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteDepositAction } from "@/lib/actions/deposits";
+import { depositsApi } from "@/lib/api-client";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { formatMonthLabel, getMonthKey } from "@/lib/month";
-import { getDepositsPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 const filterSelectClassName =
@@ -113,7 +113,7 @@ export default async function DepositsPage({
                               Edit
                             </Link>
                           </Button>
-                          <DeleteButton label="Delete" message="Delete this deposit record?" variant="ghost" action={deleteDepositAction.bind(null, record.id)} />
+                          <DeleteButton label="Delete" message="Delete this deposit record?" variant="ghost" action={depositsApi.delete.bind(null, record.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

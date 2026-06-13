@@ -9,10 +9,10 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { deleteTimelinePostAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { formatDateTime } from "@/lib/format";
-import { getTimelinePageData } from "@/lib/queries/app-data";
-import { requireUser } from "@/lib/rbac";
+
+
 import { createQueryString, getSingleSearchParam } from "@/lib/utils";
 
 export default async function TimelinePage({
@@ -91,7 +91,7 @@ export default async function TimelinePage({
                             Edit
                           </Link>
                         </Button>
-                        <DeleteButton label="Delete" message="Delete this timeline post?" variant="ghost" action={deleteTimelinePostAction.bind(null, post.id)} />
+                        <DeleteButton label="Delete" message="Delete this timeline post?" variant="ghost" action={communityApi.deleteTimelinePost.bind(null, post.id)} />
                         {user.role === "ADMIN" ? <TimelineResolveButton postId={post.id} isResolved={post.isResolved} /> : null}
                       </div>
                     ) : user.role === "ADMIN" ? (

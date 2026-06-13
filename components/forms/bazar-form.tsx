@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveBazarExpenseAction } from "@/lib/actions/bazar";
+import { bazarApi } from "@/lib/api-client";
 import { bazarExpenseFormSchema, type BazarExpenseFormInput, type BazarExpenseFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,7 +55,7 @@ export function BazarForm({
           className="grid gap-5 md:grid-cols-2"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveBazarExpenseAction(values);
+              const result = await bazarApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);

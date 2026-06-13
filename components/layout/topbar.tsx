@@ -3,8 +3,8 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import type { Session } from "next-auth";
 
+import type { AuthUser } from "../../shared/types";
 import { MobileSidebar } from "@/components/layout/mobile-sidebar";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { UserNav } from "@/components/layout/user-nav";
@@ -17,7 +17,7 @@ function titleize(value: string) {
     .join(" ");
 }
 
-export function Topbar({ user }: { user: Session["user"] }) {
+export function Topbar({ user }: { user: AuthUser }) {
   const pathname = usePathname();
 
   const currentPage = useMemo(() => {

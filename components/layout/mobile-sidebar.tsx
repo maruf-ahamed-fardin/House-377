@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Session } from "next-auth";
 import { Menu, X } from "lucide-react";
 
+import type { AuthUser } from "../../shared/types";
 import { SidebarContent } from "@/components/layout/sidebar";
 import { Button } from "@/components/ui/button";
 
-export function MobileSidebar({ user }: { user: Session["user"] }) {
+export function MobileSidebar({ user }: { user: AuthUser }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const drawerRef = useRef<HTMLDivElement>(null);

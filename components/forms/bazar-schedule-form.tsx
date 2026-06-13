@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveBazarScheduleAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { bazarScheduleFormSchema, type BazarScheduleFormInput, type BazarScheduleFormValues } from "@/lib/validations/community";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,7 +47,7 @@ export function BazarScheduleForm({
           className="grid gap-5"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveBazarScheduleAction(values);
+              const result = await communityApi.saveBazarSchedule(values);
 
               if (!result.success) {
                 toast.error(result.message);

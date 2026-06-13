@@ -6,10 +6,10 @@ import { NoticeForm } from "@/components/forms/notice-form";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { noticePriorityClasses } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
-import { getNoticesPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, getSingleSearchParam } from "@/lib/utils";
-import { deleteNoticeAction } from "@/lib/actions/notices";
+import { noticesApi } from "@/lib/api-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -82,7 +82,7 @@ export default async function NoticesPage({
                         Edit
                       </Link>
                     </Button>
-                    <DeleteButton label="Delete" message="Delete this notice?" variant="ghost" action={deleteNoticeAction.bind(null, notice.id)} />
+                    <DeleteButton label="Delete" message="Delete this notice?" variant="ghost" action={noticesApi.delete.bind(null, notice.id)} />
                   </div>
                 </div>
               ))

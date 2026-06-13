@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { deleteRentPaymentAction } from "@/lib/actions/rent";
+import { rentApi } from "@/lib/api-client";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { formatMonthLabel, getMonthKey } from "@/lib/month";
-import { getRentPageData } from "@/lib/queries/app-data";
-import { requireAdmin } from "@/lib/rbac";
+
+
 import { createQueryString, decimalToNumber, getSingleSearchParam } from "@/lib/utils";
 
 const filterSelectClassName =
@@ -155,7 +155,7 @@ export default async function RentPage({
                                 Edit
                               </Link>
                             </Button>
-                            <DeleteButton label="Delete" message="Delete this rent payment?" variant="ghost" action={deleteRentPaymentAction.bind(null, payment.id)} />
+                            <DeleteButton label="Delete" message="Delete this rent payment?" variant="ghost" action={rentApi.delete.bind(null, payment.id)} />
                           </div>
                         </TableCell>
                       </TableRow>

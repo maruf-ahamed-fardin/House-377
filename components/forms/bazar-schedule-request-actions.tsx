@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { handleBazarScheduleChangeRequestAction } from "@/lib/actions/community";
+import { communityApi } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 
 export function BazarScheduleRequestActions({ requestId }: { requestId: string }) {
@@ -13,7 +13,7 @@ export function BazarScheduleRequestActions({ requestId }: { requestId: string }
 
   function submit(status: "APPROVED" | "REJECTED") {
     startTransition(async () => {
-      const result = await handleBazarScheduleChangeRequestAction({
+      const result = await communityApi.handleChangeRequest({
         requestId,
         status,
         adminNote: "",

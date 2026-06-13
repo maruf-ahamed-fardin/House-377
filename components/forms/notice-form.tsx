@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { saveNoticeAction } from "@/lib/actions/notices";
+import { noticesApi } from "@/lib/api-client";
 import { noticeFormSchema, type NoticeFormInput, type NoticeFormValues } from "@/lib/validations/finance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +48,7 @@ export function NoticeForm({
           className="grid gap-5"
           onSubmit={form.handleSubmit((values) => {
             startTransition(async () => {
-              const result = await saveNoticeAction(values);
+              const result = await noticesApi.save(values);
 
               if (!result.success) {
                 toast.error(result.message);
