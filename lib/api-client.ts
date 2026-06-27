@@ -124,6 +124,12 @@ export const chatApi = {
   send: (content: string) => api.post("/chat", { content }),
 };
 
+// AI Assistant
+export type AssistantChatMessage = { role: "user" | "assistant"; content: string };
+export const assistantApi = {
+  ask: (messages: AssistantChatMessage[]) => api.post<{ reply: string }>("/assistant", { messages }),
+};
+
 // Community (bazar schedule + timeline)
 export const communityApi = {
   bazarSchedule: (month?: string) => api.get("/community/bazar-schedule", { month }),

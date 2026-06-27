@@ -12,6 +12,7 @@ import {
   ScrollText,
   Settings2,
   ShieldCheck,
+  Sparkles,
   Users,
   UtensilsCrossed,
   Wallet,
@@ -44,6 +45,7 @@ export const navigationItems: NavItem[] = [
   { href: "/bazar-schedule", label: "Bazar Schedule", icon: CalendarDays, roles: ["MEMBER"] },
   { href: "/timeline", label: "Timeline", icon: MessageSquareText, roles: ["ADMIN", "MEMBER"] },
   { href: "/chat", label: "Chat", icon: MessageSquareText, roles: ["ADMIN", "MEMBER"] },
+  { href: "/assistant", label: "AI Assistant", icon: Sparkles, roles: ["ADMIN", "MEMBER"] },
   { href: "/profile", label: "Profile", icon: BookOpen, roles: ["ADMIN", "MEMBER"] },
   { href: "/history", label: "History", icon: Settings2, roles: ["ADMIN", "MEMBER"] },
 ];
