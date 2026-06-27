@@ -54,7 +54,7 @@ export function AssistantPanel({ userName }: { userName: string }) {
   }
 
   return (
-    <Card className="flex h-[calc(100vh-13rem)] min-h-[460px] flex-col border-white/70 bg-white/80 dark:border-white/10 dark:bg-slate-950/75">
+    <Card className="flex h-[calc(100dvh-10rem)] min-h-[420px] flex-col border-white/70 bg-white/80 sm:h-[calc(100dvh-13rem)] dark:border-white/10 dark:bg-slate-950/75">
       <CardHeader className="border-b border-border/50">
         <CardTitle className="flex items-center gap-2">
           <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 text-white">
@@ -65,20 +65,20 @@ export function AssistantPanel({ userName }: { userName: string }) {
         <CardDescription>Answers using your real mess data. Numbers come straight from the database.</CardDescription>
       </CardHeader>
 
-      <CardContent className="flex min-h-0 flex-1 flex-col gap-4 pt-4">
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-3 pt-4 sm:gap-4 sm:pt-6">
         <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto pr-3">
           <div className="space-y-4">
             {/* Greeting + suggestions when empty */}
             {messages.length === 0 && (
               <div className="space-y-4">
                 <MessageBubble role="assistant" content={GREETING} />
-                <div className="flex flex-wrap gap-2 pl-11">
+                <div className="flex flex-wrap gap-2 pl-0 sm:pl-11">
                   {SUGGESTIONS.map((s) => (
                     <button
                       key={s}
                       type="button"
                       onClick={() => send(s)}
-                      className="rounded-full border border-border/70 bg-background/70 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-amber-400/60 hover:text-foreground"
+                      className="max-w-full rounded-2xl border border-border/70 bg-background/70 px-3 py-1.5 text-left text-xs text-muted-foreground transition-colors hover:border-amber-400/60 hover:text-foreground sm:rounded-full"
                     >
                       {s}
                     </button>
@@ -92,7 +92,7 @@ export function AssistantPanel({ userName }: { userName: string }) {
             ))}
 
             {isPending && (
-              <div className="flex items-center gap-3 pl-11 text-sm text-muted-foreground">
+              <div className="flex items-center gap-3 pl-2 text-sm text-muted-foreground sm:pl-11">
                 <span className="flex gap-1">
                   <Dot /> <Dot delay="150ms" /> <Dot delay="300ms" />
                 </span>
@@ -118,8 +118,8 @@ export function AssistantPanel({ userName }: { userName: string }) {
                 send(input);
               }
             }}
-            placeholder={`Ask anything, ${userName.split(" ")[0]}… (Enter to send, Shift+Enter for new line)`}
-            className="max-h-32 min-h-[48px] resize-none"
+            placeholder={`Ask anything, ${userName.split(" ")[0]}…`}
+            className="max-h-32 min-h-[48px] resize-none text-base sm:text-sm"
             disabled={isPending}
           />
           <Button type="submit" size="icon" className="size-12 shrink-0" disabled={isPending || !input.trim()}>
@@ -145,7 +145,7 @@ function MessageBubble({ role, content }: { role: "user" | "assistant"; content:
       </span>
       <div
         className={cn(
-          "max-w-[80%] whitespace-pre-wrap break-words rounded-2xl px-4 py-2.5 text-sm leading-7",
+          "max-w-[88%] whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2.5 text-sm leading-7 sm:max-w-[80%] sm:px-4",
           isUser ? "bg-sky-500 text-white" : "border border-border/70 bg-background/70",
         )}
       >
